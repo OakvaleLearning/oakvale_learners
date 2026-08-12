@@ -106,7 +106,7 @@ export default function AboutPage() {
         title="Investing in Healthcare Talent Where the World Needs It Most"
         description="Creating scalable, career-focused learning solutions to unlock 100,000 healthcare jobs across Africa, Asia, and the Global South."
         image={{
-          src: "/about-hero.jpg",
+          src: "/why-oakvale-bg1.png",
           alt: "A confident healthcare assistant caring for a patient",
         }}
       />
