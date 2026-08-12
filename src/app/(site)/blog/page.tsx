@@ -25,6 +25,10 @@ export default async function BlogPage() {
   return (
     <>
       <PageHero
+        bgImage={{
+          src: "/why-oakvale-bg1.png",
+          alt: "Blog",
+        }}
         kicker="Oakvale Blog"
         title="Insights and guides for the care sector"
         description="Practical articles on caregiving, child development, safeguarding, and building a career you're proud of."
@@ -77,7 +81,9 @@ export default async function BlogPage() {
                       </div>
                       <div className="flex flex-1 flex-col p-6">
                         <div className="flex items-center gap-2 text-xs font-medium text-ink-400">
-                          {p.publishedAt && <span>{formatDay(p.publishedAt)}</span>}
+                          {p.publishedAt && (
+                            <span>{formatDay(p.publishedAt)}</span>
+                          )}
                           <span className="size-1 rounded-full bg-ink-300" />
                           <span>{readingTime(p.content)} min read</span>
                         </div>

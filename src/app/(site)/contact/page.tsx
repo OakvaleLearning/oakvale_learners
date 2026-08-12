@@ -23,6 +23,10 @@ export default function ContactPage() {
   return (
     <>
       <PageHero
+        bgImage={{
+          src: "/why-oakvale-bg1.png",
+          alt: "About us",
+        }}
         kicker="Contact Us"
         title="We'd love to hear from you"
         description="Questions about a program, enrolment, or partnering with Oakvale? Send us a message and our team will get back to you."
