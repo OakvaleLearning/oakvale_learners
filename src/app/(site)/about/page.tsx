@@ -207,10 +207,7 @@ export default function AboutPage() {
       {/* Values */}
       <section className="bg-ink-50 py-20 sm:py-24">
         <Container>
-          <SectionHeading
-            kicker="What We Stand For"
-            title="Our Values"
-          />
+          <SectionHeading kicker="What We Stand For" title="Our Values" />
           <Stagger className="mt-14 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
             {values.map((v) => (
               <StaggerItem key={v.title} className="h-full">
@@ -250,7 +247,7 @@ export default function AboutPage() {
                     <ArrowRight className="size-5" />
                   </ButtonLink>
                   <Link
-                    href="/contact"
+                    href="https://jobs.oakvaleltd.com"
                     className="inline-flex items-center justify-center gap-2 rounded-full bg-primary-600 px-8 py-4 text-base font-medium text-white ring-1 ring-white/25 transition-colors hover:bg-primary-500"
                   >
                     Explore Open Roles
