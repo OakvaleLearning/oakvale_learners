@@ -30,14 +30,7 @@ export const NAV_LINKS = [
     ],
   },
   { label: "Employers", href: "/employers" },
-  {
-    label: "Resources",
-    href: "/resources",
-    children: [
-      { label: "Resource Library", href: "/resources" },
-      { label: "Blog", href: "/blog" },
-    ],
-  },
+  { label: "Blog", href: "/blog" },
   { label: "Contact", href: "/contact" },
 ] as const;
 
@@ -372,7 +365,7 @@ export const CAREER_PATHS: CareerPath[] = [
       "Access to international care opportunities",
     ],
     image: "/careers_abroad.jpg",
-    cta: { label: "See global opportunities", href: "/resources" },
+    cta: { label: "See global opportunities", href: "/programs" },
     accent: "accent",
   },
   {

@@ -14,7 +14,7 @@ const programLinks = [
   { label: "Adult & Elderly Care", href: "/programs/adult-care" },
   { label: "Child Care & Early Years", href: "/programs/child-care" },
   { label: "For Employers", href: "/employers" },
-  { label: "Resources", href: "/resources" },
+  { label: "Blog", href: "/blog" },
 ];
 
 const companyLinks = [

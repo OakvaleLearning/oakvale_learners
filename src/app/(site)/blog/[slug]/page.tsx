@@ -144,8 +144,8 @@ export default async function BlogPostPage({
         description="Join a certified Oakvale program and get job-ready with hands-on training and support."
         primaryHref="/programs"
         primaryLabel="Explore programs"
-        secondaryHref="/resources"
-        secondaryLabel="Browse resources"
+        secondaryHref="/blog"
+        secondaryLabel="Read the blog"
       />
     </>
   );
