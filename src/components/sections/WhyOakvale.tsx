@@ -19,7 +19,6 @@ export function WhyOakvale() {
         className="pointer-events-none object-cover opacity-20 mix-blend-luminosity"
       />
       {/* Solid tint so the image reads as texture and text stays legible */}
-      {/* <div className="absolute inset-0 bg-primary-950/40" />  */}
       <Container className="relative">
         <SectionHeading
           dark
