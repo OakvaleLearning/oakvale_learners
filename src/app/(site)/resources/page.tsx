@@ -75,7 +75,7 @@ export default async function ResourcesPage() {
     <>
       <PageHero
         kicker="Learning Resources"
-        title="Guides, tools, and support for your care journey"
+        title="Guides, tools, and support for your care journey."
         description="Explore downloadable guides, clinical resources, and interactive scenarios. Full libraries unlock when you enrol — join the waitlist to be notified as new resources drop."
       />
 
