@@ -25,12 +25,7 @@ function PathRow({ path, index }: { path: CareerPath; index: number }) {
             sizes="(min-width: 1024px) 45vw, 100vw"
             className="object-cover"
           />
-          <div
-            className={cn(
-              "pointer-events-none absolute inset-0 opacity-15 mix-blend-multiply",
-              isPrimary ? "bg-primary-600" : "bg-accent-500"
-            )}
-          />
+         
         </div>
       </Reveal>
 

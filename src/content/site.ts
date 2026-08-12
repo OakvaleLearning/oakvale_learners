@@ -30,7 +30,14 @@ export const NAV_LINKS = [
     ],
   },
   { label: "Employers", href: "/employers" },
-  { label: "Resources", href: "/resources" },
+  {
+    label: "Resources",
+    href: "/resources",
+    children: [
+      { label: "Resource Library", href: "/resources" },
+      { label: "Blog", href: "/blog" },
+    ],
+  },
   { label: "Contact", href: "/contact" },
 ] as const;
 

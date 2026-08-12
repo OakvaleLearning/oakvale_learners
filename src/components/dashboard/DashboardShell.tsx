@@ -13,6 +13,7 @@ import {
   User,
   Users,
   Inbox,
+  Newspaper,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Logo } from "@/components/layout/Logo";
@@ -34,6 +35,7 @@ const NAV: Record<"learner" | "admin", NavItem[]> = {
     { label: "Enrolments", href: "/admin/enrollments", icon: GraduationCap },
     { label: "Payments", href: "/admin/payments", icon: Receipt },
     { label: "Learners", href: "/admin/learners", icon: Users },
+    { label: "Blog", href: "/admin/blog", icon: Newspaper },
     { label: "Leads", href: "/admin/leads", icon: Inbox },
   ],
 };

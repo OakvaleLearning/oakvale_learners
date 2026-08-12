@@ -34,9 +34,7 @@ function TrackCard({ program, delay }: { program: Program; delay: number }) {
       <div
         className={`group relative flex h-full flex-col overflow-hidden rounded-4xl border border-ink-100 bg-white p-8 shadow-sm transition-all duration-500 hover:-translate-y-1.5 hover:shadow-2xl hover:shadow-ink-900/10 ${m.ring} sm:p-10`}
       >
-        <div
-          className={`pointer-events-none absolute -right-16 -top-16 size-56 rounded-full ${m.glow} blur-2xl transition-opacity duration-500 group-hover:opacity-100 opacity-60`}
-        />
+        
         <div className="relative flex items-center justify-between">
           <span
             className={`grid size-14 place-items-center rounded-2xl ${m.iconBg} text-white shadow-lg`}

@@ -12,7 +12,7 @@ export function WhyOakvale() {
     <section className="relative overflow-hidden bg-mesh py-20 text-white sm:py-28">
       {/* Background image */}
       <Image
-        src="/media/why-oakvale-bg.jpg"
+        src="/why-oakvale-bg.png"
         alt=""
         fill
         sizes="100vw"
