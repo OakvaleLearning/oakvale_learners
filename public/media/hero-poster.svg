@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1920" height="1080" viewBox="0 0 1920 1080" preserveAspectRatio="xMidYMid slice">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#171149"/>
+      <stop offset="0.5" stop-color="#211a6b"/>
+      <stop offset="1" stop-color="#0d0a2b"/>
+    </linearGradient>
+    <radialGradient id="glow1" cx="0.2" cy="0.25" r="0.5">
+      <stop offset="0" stop-color="#3229a2" stop-opacity="0.8"/>
+      <stop offset="1" stop-color="#3229a2" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="glow2" cx="0.8" cy="0.75" r="0.5">
+      <stop offset="0" stop-color="#d929dd" stop-opacity="0.55"/>
+      <stop offset="1" stop-color="#d929dd" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+  <rect width="1920" height="1080" fill="url(#bg)"/>
+  <rect width="1920" height="1080" fill="url(#glow1)"/>
+  <rect width="1920" height="1080" fill="url(#glow2)"/>
+  <g fill="none" stroke="#ffffff" stroke-opacity="0.05" stroke-width="1">
+    <path d="M0 200 H1920 M0 400 H1920 M0 600 H1920 M0 800 H1920"/>
+    <path d="M320 0 V1080 M640 0 V1080 M960 0 V1080 M1280 0 V1080 M1600 0 V1080"/>
+  </g>
+  <text x="960" y="1030" text-anchor="middle" font-family="Roboto, Arial, sans-serif" font-size="26" fill="#ffffff" fill-opacity="0.35">
+    Hero background placeholder — drop hero.mp4 in /public/media to enable video
+  </text>
+</svg>

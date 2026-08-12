@@ -1,0 +1,107 @@
+// Oakvale Learning - Prisma schema
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum Role {
+  LEARNER
+  ADMIN
+}
+
+enum Track {
+  ADULT_CARE
+  CHILD_CARE
+}
+
+enum PaymentPlan {
+  FULL
+  SPLIT
+}
+
+enum EnrollmentStatus {
+  PENDING     // created, awaiting payment
+  PARTIAL     // split payment: deposit paid, balance due
+  ACTIVE      // fully paid
+  CANCELLED
+}
+
+enum PaymentStatus {
+  PENDING
+  SUCCESS
+  FAILED
+  ABANDONED
+}
+
+model User {
+  id           String       @id @default(cuid())
+  name         String
+  email        String       @unique
+  passwordHash String
+  role         Role         @default(LEARNER)
+  createdAt    DateTime     @default(now())
+  updatedAt    DateTime     @updatedAt
+  enrollments  Enrollment[]
+  payments     Payment[]
+}
+
+model Enrollment {
+  id          String           @id @default(cuid())
+  user        User             @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId      String
+  track       Track
+  plan        PaymentPlan
+  status      EnrollmentStatus @default(PENDING)
+  cohort      String           @default("Cohort 2")
+  // amounts stored in kobo (NGN * 100) to match Paystack
+  totalAmount Int
+  amountPaid  Int              @default(0)
+  createdAt   DateTime         @default(now())
+  updatedAt   DateTime         @updatedAt
+  payments    Payment[]
+
+  @@index([userId])
+  @@index([status])
+}
+
+model Payment {
+  id           String        @id @default(cuid())
+  enrollment   Enrollment    @relation(fields: [enrollmentId], references: [id], onDelete: Cascade)
+  enrollmentId String
+  user         User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId       String
+  reference    String        @unique // Paystack transaction reference
+  amount       Int // kobo
+  status       PaymentStatus @default(PENDING)
+  channel      String? // card, bank, etc (from Paystack)
+  paidAt       DateTime?
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @updatedAt
+
+  @@index([enrollmentId])
+  @@index([userId])
+  @@index([status])
+}
+
+model WaitlistEntry {
+  id        String   @id @default(cuid())
+  name      String
+  email     String
+  track     Track?
+  createdAt DateTime @default(now())
+
+  @@index([email])
+}
+
+model ContactMessage {
+  id        String   @id @default(cuid())
+  name      String
+  email     String
+  subject   String?
+  message   String
+  createdAt DateTime @default(now())
+}
