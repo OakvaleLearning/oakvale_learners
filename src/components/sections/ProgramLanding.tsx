@@ -213,7 +213,6 @@ export function ProgramLanding({ program }: { program: Program }) {
                   {GET_CERTIFIED.body}
                 </p>
                 <div className="mt-7 inline-flex items-center gap-3 rounded-2xl border border-accent-100 bg-accent-50 px-5 py-4">
-                  <Sparkles className="size-5 text-accent-500" />
                   <p className="text-sm font-medium text-accent-800">
                     {program.details.find((d) => d.label === "Credential")?.value}
                   </p>
