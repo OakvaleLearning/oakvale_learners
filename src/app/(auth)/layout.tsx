@@ -15,7 +15,7 @@ export default async function AuthLayout({
   return (
     <div className="grid min-h-screen lg:grid-cols-2">
       {/* Brand panel */}
-      <div className="relative hidden overflow-hidden bg-mesh lg:block">
+      <div className="relative hidden overflow-hidden bg-mesh lg:block bg-no-repeat bg-cover" style={{backgroundImage: "url('/why-oakvale-bg1.png')" }}>
         <div className="absolute inset-0 bg-grid opacity-40" />
         <div className="pointer-events-none absolute -right-20 top-24 size-96 rounded-full bg-accent-500/20 blur-3xl" />
         <div className="relative flex h-full flex-col justify-between p-12 text-white">
