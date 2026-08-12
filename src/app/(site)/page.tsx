@@ -12,8 +12,7 @@ import {
   GraduationCap,
   BriefcaseBusiness,
   HeartHandshake,
-  ShieldCheck,
-  Sparkles,
+  ShieldCheck, 
 } from "lucide-react";
 
 const alignment = [
@@ -78,7 +77,7 @@ export default function HomePage() {
                   description="Every Oakvale track is engineered around outcomes: certification, employability, and the confidence to practice anywhere in the world."
                 />
                 <div className="mt-8 inline-flex items-center gap-3 rounded-2xl border border-primary-100 bg-primary-50 px-5 py-4">
-                  <Sparkles className="size-5 text-accent-500" />
+                  
                   <p className="text-sm font-medium text-primary-800">
                     Cohort 2 is now enrolling — spots issued on a first-served
                     basis.

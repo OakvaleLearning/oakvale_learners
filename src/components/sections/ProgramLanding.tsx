@@ -7,8 +7,7 @@ import {
   Clock,
   Users,
   Trophy,
-  BookOpen,
-  Sparkles,
+  BookOpen, 
   GraduationCap,
 } from "lucide-react";
 import { Container } from "@/components/ui/Container";
