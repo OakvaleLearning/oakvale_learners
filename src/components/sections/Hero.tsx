@@ -24,7 +24,7 @@ export function Hero() {
         loop
         muted
         playsInline
-        poster="/media/hero-poster.svg"
+        poster="/media/hero-poster.jpg"
       >
         <source src="/media/hero.webm" type="video/webm" />
         <source src="/home-bg.mp4" type="video/mp4" />
