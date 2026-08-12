@@ -105,8 +105,12 @@ export default function AboutPage() {
         kicker="About Oakvale Learning"
         title="Investing in Healthcare Talent Where the World Needs It Most"
         description="Creating scalable, career-focused learning solutions to unlock 100,000 healthcare jobs across Africa, Asia, and the Global South."
+        bgImage={{
+        src: "/why-oakvale-bg1.png",
+        alt: "A confident healthcare assistant caring for a patient"
+        }}
         image={{
-          src: "/why-oakvale-bg1.png",
+          src: "/about-hero.jpg",
           alt: "A confident healthcare assistant caring for a patient",
         }}
       />
