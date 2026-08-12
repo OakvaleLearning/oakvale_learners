@@ -87,6 +87,10 @@ export default function ProgramsPage() {
   return (
     <>
       <PageHero
+        bgImage={{
+          src: "/why-oakvale-bg1.png",
+          alt: "About us"
+        }}
         kicker="Certified Caregiving Tracks"
         title="Two paths. One verified future in care."
         description="Whether your calling is caring for aging adults or nurturing the next generation, Oakvale gives you globally aligned skills, hands-on placement, and real career pathways."
