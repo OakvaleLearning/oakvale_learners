@@ -103,29 +103,6 @@ export default function ResourcesPage() {
           </Stagger>
         </Container>
       </section>
-
-      {/* Newsletter / waitlist */}
-      <section className="pb-24">
-        <Container>
-          <Reveal>
-            <div className="relative overflow-hidden rounded-4xl bg-mesh p-8 text-white sm:p-14">
-              <div className="absolute inset-0 bg-grid opacity-40" />
-              <div className="relative grid gap-8 lg:grid-cols-2 lg:items-center">
-                <div>
-                  <h3 className="text-2xl font-bold sm:text-3xl">
-                    Get new resources first
-                  </h3>
-                  <p className="mt-3 max-w-md text-ink-200">
-                    Join our waitlist for early access to guides, scholarships,
-                    learning events, and upcoming cohorts.
-                  </p>
-                </div>
-                <WaitlistForm variant="footer" />
-              </div>
-            </div>
-          </Reveal>
-        </Container>
-      </section>
     </>
   );
 }

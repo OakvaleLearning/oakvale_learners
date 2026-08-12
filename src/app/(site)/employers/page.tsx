@@ -72,7 +72,7 @@ export default function EmployersPage() {
         }}
       >
         <Link
-          href="/contact"
+          href="https://jobs.oakvaleltd.com/"
           className="inline-flex items-center gap-2 rounded-full bg-accent-500 px-7 py-3.5 text-sm font-semibold text-white shadow-lg shadow-accent-500/30 transition-all hover:-translate-y-0.5 hover:bg-accent-600"
         >
           Partner with Oakvale
@@ -153,9 +153,9 @@ export default function EmployersPage() {
       <CTABand
         title="Let's build your care workforce together"
         description="Tell us about your hiring or training needs and we'll design a partnership that works."
-        primaryHref="/contact"
+        primaryHref="https://jobs.oakvaleltd.com/"
         primaryLabel="Get in touch"
-        secondaryHref="/programs"
+        secondaryHref="https://jobs.oakvaleltd.com/"
         secondaryLabel="View programs"
       />
     </>

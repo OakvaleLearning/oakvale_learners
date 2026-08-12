@@ -29,3 +29,27 @@ export function formatDate(date: Date | string): string {
     timeStyle: "short",
   }).format(new Date(date));
 }
+
+/** Format a date as a plain day (no time), e.g. "12 Aug 2026". */
+export function formatDay(date: Date | string): string {
+  return new Intl.DateTimeFormat("en-NG", { dateStyle: "medium" }).format(
+    new Date(date)
+  );
+}
+
+/** Turn a title into a URL-safe slug. */
+export function slugify(input: string): string {
+  return input
+    .toLowerCase()
+    .trim()
+    .replace(/['"]/g, "")
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-+|-+$/g, "")
+    .slice(0, 80);
+}
+
+/** Rough reading-time estimate in minutes for a body of text. */
+export function readingTime(text: string): number {
+  const words = text.trim().split(/\s+/).filter(Boolean).length;
+  return Math.max(1, Math.round(words / 200));
+}

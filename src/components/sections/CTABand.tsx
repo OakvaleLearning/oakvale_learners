@@ -38,14 +38,14 @@ export function CTABand({
                   {primaryLabel}
                   <ArrowRight className="size-5" />
                 </ButtonLink>
-                <ButtonLink
+                {/* <ButtonLink
                   href={secondaryHref}
                   variant="white"
                   size="lg"
                   className="bg-white/10 text-white ring-1 ring-white/25 backdrop-blur hover:bg-white/20"
                 >
                   {secondaryLabel}
-                </ButtonLink>
+                </ButtonLink> */}
               </div>
             </div>
           </div>

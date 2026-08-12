@@ -29,6 +29,35 @@ export const enrollSchema = z.object({
   plan: z.enum(["FULL", "SPLIT"]),
 });
 
+export const BLOG_CATEGORIES = [
+  "Guide",
+  "Video",
+  "Toolkit",
+  "Community",
+  "News",
+  "Download",
+] as const;
+
+export const blogPostSchema = z.object({
+  title: z.string().trim().min(3, "Title is too short").max(160),
+  slug: z
+    .string()
+    .trim()
+    .min(3, "Slug is too short")
+    .max(80)
+    .regex(
+      /^[a-z0-9]+(?:-[a-z0-9]+)*$/,
+      "Use lowercase letters, numbers and hyphens only"
+    ),
+  excerpt: z.string().trim().min(10, "Add a short summary").max(300),
+  content: z.string().trim().min(20, "Content is too short").max(50000),
+  category: z.enum(BLOG_CATEGORIES),
+  coverImage: z.string().trim().url("Enter a valid URL").max(500).optional().or(z.literal("")),
+  published: z.boolean().optional().default(false),
+});
+
+export type BlogPostInput = z.infer<typeof blogPostSchema>;
+
 export type WaitlistInput = z.infer<typeof waitlistSchema>;
 export type ContactInput = z.infer<typeof contactSchema>;
 export type SignupInput = z.infer<typeof signupSchema>;
