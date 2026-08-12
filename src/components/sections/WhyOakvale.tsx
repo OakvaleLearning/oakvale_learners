@@ -12,15 +12,14 @@ export function WhyOakvale() {
     <section className="relative overflow-hidden bg-mesh py-20 text-white sm:py-28">
       {/* Background image */}
       <Image
-        src="/why-oakvale-bg.png"
+        src="/why-oakvale-bg1.png"
         alt=""
         fill
         sizes="100vw"
         className="pointer-events-none object-cover opacity-20 mix-blend-luminosity"
       />
       {/* Solid tint so the image reads as texture and text stays legible */}
-      <div className="absolute inset-0 bg-primary-950/70" />
-      <div className="absolute inset-0 bg-grid opacity-40" />
+      {/* <div className="absolute inset-0 bg-primary-950/40" />  */}
       <Container className="relative">
         <SectionHeading
           dark
