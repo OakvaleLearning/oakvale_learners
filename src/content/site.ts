@@ -7,7 +7,7 @@ export const SITE = {
   name: "Oakvale Learning",
   tagline: "Certified Caregiving Training",
   email: "hello@oakvalelearning.com",
-  phone: "+234 800 000 0000",
+  phone: "+234 810 818 9514",
   address: "Lagos, Nigeria",
   cohort: "Cohort 2",
   socials: {
@@ -159,7 +159,7 @@ export const ADULT_CARE: Program = {
   pricing: [
     {
       header: "Pay in Full",
-      price: 80000,
+      price: 100000,
       description:
         "Make a single, one-time payment to instantly guarantee your spot. Skip the stress of tracking installments and focus entirely on your upcoming training.",
       bullet: "Instant seat confirmation.",
@@ -169,7 +169,7 @@ export const ADULT_CARE: Program = {
     },
     {
       header: "Pay in Installments",
-      price: 40000,
+      price: 50000,
       description:
         "Lock your seat right now with a 50% deposit. You will have the flexibility to clear your remaining balance anytime before the first day of class.",
       bullet: "Balance due before Day 1.",
@@ -283,7 +283,7 @@ export const CHILD_CARE: Program = {
   pricing: [
     {
       header: "Pay in Full",
-      price: 100000,
+      price: 80000,
       description:
         "Make a single, one-time payment to instantly guarantee your spot. Skip the stress of tracking installments and focus entirely on your upcoming training.",
       bullet: "Instant seat confirmation.",
@@ -293,7 +293,7 @@ export const CHILD_CARE: Program = {
     },
     {
       header: "Pay in Installments",
-      price: 50000,
+      price: 40000,
       description:
         "Lock your seat right now with a 50% deposit. You will have the flexibility to clear your remaining balance anytime before the first day of class.",
       bullet: "Balance due before Day 1.",
