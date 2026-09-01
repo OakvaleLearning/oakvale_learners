@@ -10,6 +10,12 @@ export const SITE = {
   phone: "+234 810 818 9514",
   address: "Lagos, Nigeria",
   cohort: "Cohort 2",
+  // Cohort Day 1 — LMS access unlocks once both instalments clear before this date.
+  cohortStartDate: "2026-10-06",
+  // Deadline for the 2nd (final) instalment on SPLIT plans.
+  balanceDueDate: "2026-09-29",
+  // Free community / LMS platform learners get on full payment.
+  communityUrl: "https://community.oakvalelearning.com",
   socials: {
     instagram: "#",
     linkedin: "#",

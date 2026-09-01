@@ -1,6 +1,7 @@
 import "server-only";
 import { prisma } from "./prisma";
-import { getProgramByTrack, type TrackSlug } from "@/content/site";
+import { getProgramByTrack, SITE, type TrackSlug } from "@/content/site";
+import { sendDepositEmail, sendEnrolledEmail } from "./emails";
 import type { Track, PaymentPlan } from "@prisma/client";
 
 const slugToTrack: Record<TrackSlug, Track> = {
@@ -47,6 +48,13 @@ export async function applySuccessfulPayment(
   const newAmountPaid = enrollment.amountPaid + payment.amount;
   const fullyPaid = newAmountPaid >= enrollment.totalAmount;
 
+  // On the deposit (first partial payment), stamp the balance due date so the
+  // reminder cron and the confirmation email have a concrete deadline.
+  const balanceDueDate =
+    !fullyPaid && !enrollment.balanceDueDate
+      ? new Date(SITE.balanceDueDate)
+      : enrollment.balanceDueDate;
+
   const [, updatedEnrollment] = await prisma.$transaction([
     prisma.payment.update({
       where: { id: payment.id },
@@ -61,11 +69,54 @@ export async function applySuccessfulPayment(
       data: {
         amountPaid: newAmountPaid,
         status: fullyPaid ? "ACTIVE" : "PARTIAL",
+        balanceDueDate,
       },
     }),
   ]);
 
+  // Fire the SOP email for this milestone, exactly once (see notifyPayment).
+  await notifyPayment(updatedEnrollment, fullyPaid);
+
   return updatedEnrollment;
+}
+
+/**
+ * Send the deposit (Email 1) or enrolment (Email 3) email for a milestone,
+ * guaranteeing at-most-once delivery even though this runs from both the
+ * webhook and the callback-verify paths. We atomically "claim" the send by
+ * setting the sent timestamp only when it's still null; a losing/duplicate
+ * call sees count === 0 and skips. If the send fails we clear the stamp so a
+ * later reconciliation can retry.
+ */
+async function notifyPayment(
+  enrollment: { id: string; userId: string },
+  fullyPaid: boolean
+): Promise<void> {
+  const field = fullyPaid ? "enrolledEmailSentAt" : "depositEmailSentAt";
+
+  const claim = await prisma.enrollment.updateMany({
+    where: { id: enrollment.id, [field]: null },
+    data: { [field]: new Date() },
+  });
+  if (claim.count === 0) return; // already sent (or being sent) elsewhere
+
+  const [user, fresh] = await Promise.all([
+    prisma.user.findUnique({ where: { id: enrollment.userId } }),
+    prisma.enrollment.findUnique({ where: { id: enrollment.id } }),
+  ]);
+  if (!user || !fresh) return;
+
+  const sent = fullyPaid
+    ? await sendEnrolledEmail(user, fresh)
+    : await sendDepositEmail(user, fresh);
+
+  if (!sent) {
+    // Release the claim so the next webhook/verify (or manual retry) resends.
+    await prisma.enrollment.update({
+      where: { id: enrollment.id },
+      data: { [field]: null },
+    });
+  }
 }
 
 export async function markPaymentFailed(reference: string) {

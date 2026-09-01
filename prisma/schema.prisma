@@ -60,6 +60,12 @@ model Enrollment {
   // amounts stored in kobo (NGN * 100) to match Paystack
   totalAmount Int
   amountPaid  Int              @default(0)
+  // For SPLIT plans: when the 2nd instalment balance is due (set on deposit).
+  balanceDueDate DateTime?
+  // Email SOP: timestamps used to send each mail exactly once (idempotency).
+  depositEmailSentAt  DateTime?
+  reminderEmailSentAt DateTime?
+  enrolledEmailSentAt DateTime?
   createdAt   DateTime         @default(now())
   updatedAt   DateTime         @updatedAt
   payments    Payment[]
