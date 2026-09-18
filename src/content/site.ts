@@ -282,7 +282,7 @@ export const CHILD_CARE: Program = {
   ],
   details: [
     { label: "Format", value: "Hybrid (Online + Community)" },
-    { label: "Duration", value: "15 Weeks ( 55 hours of active learning)" },
+    { label: "Duration", value: "15 Weeks (55 hours of active learning)" },
     { label: "Credential", value: "Certificate in Early Years Childcare 0 to 5 Years" },
     { label: "Alignment", value: "EYFS (UK), CDA (USA), ECE (Canada), UNCRC" },
   ],
