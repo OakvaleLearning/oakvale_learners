@@ -3,7 +3,16 @@
 import { useState, type FormEvent } from "react";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
-import { Eye, EyeOff, Loader2, Mail, Lock, User, AlertCircle } from "lucide-react";
+import {
+  Eye,
+  EyeOff,
+  Loader2,
+  Mail,
+  Lock,
+  Phone,
+  User,
+  AlertCircle,
+} from "lucide-react";
 
 const inputWrap = "relative";
 const inputClass =
@@ -29,6 +38,7 @@ export function AuthForm({ mode }: { mode: "login" | "signup" }) {
       ? {
           name: data.get("name"),
           email: data.get("email"),
+          phone: data.get("phone"),
           password: data.get("password"),
         }
       : { email: data.get("email"), password: data.get("password") };
@@ -94,6 +104,20 @@ export function AuthForm({ mode }: { mode: "login" | "signup" }) {
             className={inputClass}
           />
         </div>
+        {isSignup && (
+          <div className={inputWrap}>
+            <Phone className="pointer-events-none absolute left-4 top-1/2 size-4 -translate-y-1/2 text-ink-400" />
+            <input
+              name="phone"
+              type="tel"
+              required
+              placeholder="WhatsApp number"
+              autoComplete="tel"
+              inputMode="tel"
+              className={inputClass}
+            />
+          </div>
+        )}
         <div className={inputWrap}>
           <Lock className="pointer-events-none absolute left-4 top-1/2 size-4 -translate-y-1/2 text-ink-400" />
           <input
@@ -116,7 +140,8 @@ export function AuthForm({ mode }: { mode: "login" | "signup" }) {
         </div>
         {isSignup ? (
           <p className="text-xs text-ink-400">
-            Use at least 8 characters.
+            Use at least 8 characters. We&apos;ll use your WhatsApp number for
+            cohort updates and support — nothing else.
           </p>
         ) : (
           <p className="text-right">

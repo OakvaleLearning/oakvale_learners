@@ -1,6 +1,6 @@
 import { Users } from "lucide-react";
 import { prisma } from "@/lib/prisma";
-import { formatNaira, formatDate } from "@/lib/utils";
+import { formatNaira, formatDate, whatsappLink } from "@/lib/utils";
 
 export const dynamic = "force-dynamic";
 
@@ -32,11 +32,12 @@ export default async function AdminLearnersPage() {
         </div>
       ) : (
         <div className="overflow-x-auto rounded-3xl border border-ink-100 bg-white">
-          <table className="w-full min-w-[720px] text-sm">
+          <table className="w-full min-w-[820px] text-sm">
             <thead>
               <tr className="border-b border-ink-100 text-left text-xs uppercase tracking-wide text-ink-400">
                 <th className="px-5 py-3 font-semibold">Name</th>
                 <th className="px-5 py-3 font-semibold">Email</th>
+                <th className="px-5 py-3 font-semibold">WhatsApp</th>
                 <th className="px-5 py-3 font-semibold">Enrolments</th>
                 <th className="px-5 py-3 font-semibold">Total paid</th>
                 <th className="px-5 py-3 font-semibold">Joined</th>
@@ -49,6 +50,20 @@ export default async function AdminLearnersPage() {
                   <tr key={u.id} className="text-ink-700">
                     <td className="px-5 py-3 font-medium text-ink-900">{u.name}</td>
                     <td className="px-5 py-3 text-ink-500">{u.email}</td>
+                    <td className="px-5 py-3">
+                      {u.phone ? (
+                        <a
+                          href={whatsappLink(u.phone)}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="font-medium text-primary-600 hover:text-primary-700"
+                        >
+                          {u.phone}
+                        </a>
+                      ) : (
+                        <span className="text-ink-300">—</span>
+                      )}
+                    </td>
                     <td className="px-5 py-3">{u.enrollments.length}</td>
                     <td className="px-5 py-3 font-medium text-ink-900">
                       {formatNaira(paid)}

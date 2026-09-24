@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { signupSchema } from "@/lib/validation";
 import { hashPassword, createSession } from "@/lib/auth";
+import { normalizePhone } from "@/lib/utils";
 
 export async function POST(req: Request) {
   try {
@@ -13,7 +14,7 @@ export async function POST(req: Request) {
         { status: 400 }
       );
     }
-    const { name, email, password } = parsed.data;
+    const { name, email, phone, password } = parsed.data;
     const normalizedEmail = email.toLowerCase();
 
     const existing = await prisma.user.findUnique({
@@ -28,7 +29,12 @@ export async function POST(req: Request) {
 
     const passwordHash = await hashPassword(password);
     const user = await prisma.user.create({
-      data: { name, email: normalizedEmail, passwordHash },
+      data: {
+        name,
+        email: normalizedEmail,
+        phone: normalizePhone(phone),
+        passwordHash,
+      },
     });
 
     await createSession({

@@ -39,6 +39,7 @@ export const contactSchema = z.object({
 export const signupSchema = z.object({
   name: z.string().trim().min(2, "Please enter your name").max(120),
   email: z.string().trim().email("Enter a valid email").max(200),
+  phone: phoneSchema,
   password: z.string().min(8, "Password must be at least 8 characters").max(200),
 });
 

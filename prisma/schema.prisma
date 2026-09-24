@@ -41,6 +41,9 @@ model User {
   id           String       @id @default(cuid())
   name         String
   email        String       @unique
+  // WhatsApp / phone number, stored normalised (e.g. "+2348108189514").
+  // Required at signup; nullable only for accounts created before this field.
+  phone        String?
   passwordHash String
   role         Role         @default(LEARNER)
   createdAt    DateTime     @default(now())
