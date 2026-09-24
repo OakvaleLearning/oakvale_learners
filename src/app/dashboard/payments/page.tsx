@@ -5,6 +5,7 @@ import { prisma } from "@/lib/prisma";
 import { getProgramByTrack } from "@/content/site";
 import { formatNaira, formatDate } from "@/lib/utils";
 import { StatusBadge } from "@/components/dashboard/ui";
+import { CompletePaymentButton } from "@/components/dashboard/CompletePaymentButton";
 
 export const dynamic = "force-dynamic";
 
@@ -41,7 +42,7 @@ export default async function LearnerPaymentsPage() {
         </div>
       ) : (
         <div className="overflow-x-auto rounded-3xl border border-ink-100 bg-white">
-          <table className="w-full min-w-[640px] text-sm">
+          <table className="w-full min-w-[760px] text-sm">
             <thead>
               <tr className="border-b border-ink-100 text-left text-xs uppercase tracking-wide text-ink-400">
                 <th className="px-5 py-3 font-semibold">Reference</th>
@@ -50,6 +51,9 @@ export default async function LearnerPaymentsPage() {
                 <th className="px-5 py-3 font-semibold">Channel</th>
                 <th className="px-5 py-3 font-semibold">Status</th>
                 <th className="px-5 py-3 font-semibold">Date</th>
+                <th className="px-5 py-3 font-semibold">
+                  <span className="sr-only">Actions</span>
+                </th>
               </tr>
             </thead>
             <tbody className="divide-y divide-ink-100">
@@ -70,6 +74,12 @@ export default async function LearnerPaymentsPage() {
                   </td>
                   <td className="px-5 py-3 text-ink-500">
                     {formatDate(p.createdAt)}
+                  </td>
+                  <td className="px-5 py-3 text-right">
+                    {p.status === "PENDING" &&
+                      p.enrollment.status !== "ACTIVE" && (
+                        <CompletePaymentButton paymentId={p.id} />
+                      )}
                   </td>
                 </tr>
               ))}

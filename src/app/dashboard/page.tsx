@@ -13,6 +13,7 @@ import { getProgramByTrack } from "@/content/site";
 import { formatNaira, formatDate } from "@/lib/utils";
 import { StatCard, StatusBadge } from "@/components/dashboard/ui";
 import { PayBalanceButton } from "@/components/dashboard/PayBalanceButton";
+import { CompletePaymentButton } from "@/components/dashboard/CompletePaymentButton";
 
 export const dynamic = "force-dynamic";
 
@@ -168,18 +169,25 @@ export default async function DashboardPage() {
                   <th className="px-5 py-3 font-semibold">Amount</th>
                   <th className="px-5 py-3 font-semibold">Status</th>
                   <th className="px-5 py-3 font-semibold">Date</th>
+                  <th className="px-5 py-3 font-semibold">
+                    <span className="sr-only">Actions</span>
+                  </th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-ink-100">
                 {enrollments
                   .flatMap((e) =>
-                    e.payments.map((p) => ({ p, track: e.track }))
+                    e.payments.map((p) => ({
+                      p,
+                      track: e.track,
+                      enrollmentStatus: e.status,
+                    }))
                   )
                   .sort(
                     (a, b) =>
                       b.p.createdAt.getTime() - a.p.createdAt.getTime()
                   )
-                  .map(({ p, track }) => (
+                  .map(({ p, track, enrollmentStatus }) => (
                     <tr key={p.id} className="text-ink-700">
                       <td className="px-5 py-3 font-mono text-xs">{p.reference}</td>
                       <td className="px-5 py-3">
@@ -193,6 +201,12 @@ export default async function DashboardPage() {
                       </td>
                       <td className="px-5 py-3 text-ink-500">
                         {formatDate(p.createdAt)}
+                      </td>
+                      <td className="px-5 py-3 text-right">
+                        {p.status === "PENDING" &&
+                          enrollmentStatus !== "ACTIVE" && (
+                            <CompletePaymentButton paymentId={p.id} />
+                          )}
                       </td>
                     </tr>
                   ))}
