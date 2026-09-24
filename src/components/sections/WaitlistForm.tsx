@@ -28,6 +28,7 @@ export function WaitlistForm({
         body: JSON.stringify({
           name: data.get("name"),
           email: data.get("email"),
+          phone: data.get("phone"),
           track: track ?? null,
         }),
       });
@@ -58,11 +59,18 @@ export function WaitlistForm({
     );
   }
 
+  const fieldClass = cn(
+    "w-full rounded-full border px-5 py-3.5 text-sm outline-none transition-colors focus:ring-2 focus:ring-accent-500",
+    dark
+      ? "border-white/15 bg-white/10 text-white placeholder:text-ink-400"
+      : "border-ink-200 bg-white text-ink-900 placeholder:text-ink-400"
+  );
+
   return (
     <form onSubmit={onSubmit} className="w-full">
       <div
         className={cn(
-          "flex flex-col gap-3 sm:flex-row",
+          "grid gap-3 sm:grid-cols-2",
           variant === "section" && "sm:gap-2"
         )}
       >
@@ -71,24 +79,25 @@ export function WaitlistForm({
           name="name"
           required
           placeholder="Full name"
-          className={cn(
-            "w-full rounded-full border px-5 py-3.5 text-sm outline-none transition-colors focus:ring-2 focus:ring-accent-500",
-            dark
-              ? "border-white/15 bg-white/10 text-white placeholder:text-ink-400"
-              : "border-ink-200 bg-white text-ink-900 placeholder:text-ink-400"
-          )}
+          autoComplete="name"
+          className={fieldClass}
         />
         <input
           type="email"
           name="email"
           required
           placeholder="Email address"
-          className={cn(
-            "w-full rounded-full border px-5 py-3.5 text-sm outline-none transition-colors focus:ring-2 focus:ring-accent-500",
-            dark
-              ? "border-white/15 bg-white/10 text-white placeholder:text-ink-400"
-              : "border-ink-200 bg-white text-ink-900 placeholder:text-ink-400"
-          )}
+          autoComplete="email"
+          className={fieldClass}
+        />
+        <input
+          type="tel"
+          name="phone"
+          required
+          placeholder="WhatsApp number"
+          autoComplete="tel"
+          inputMode="tel"
+          className={fieldClass}
         />
         <button
           type="submit"
@@ -105,6 +114,14 @@ export function WaitlistForm({
           )}
         </button>
       </div>
+      <p
+        className={cn(
+          "mt-2.5 text-xs",
+          dark ? "text-ink-400" : "text-ink-500"
+        )}
+      >
+        We&apos;ll use your WhatsApp number to share cohort updates — nothing else.
+      </p>
       {status === "error" && (
         <p className="mt-2 text-sm text-accent-300">{message}</p>
       )}

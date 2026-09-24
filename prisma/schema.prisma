@@ -47,6 +47,22 @@ model User {
   updatedAt    DateTime     @updatedAt
   enrollments  Enrollment[]
   payments     Payment[]
+  resetTokens  PasswordResetToken[]
+}
+
+/// Single-use, time-limited password reset tokens. Only the SHA-256 hash of the
+/// token is stored — the raw token exists solely in the emailed link.
+model PasswordResetToken {
+  id        String   @id @default(cuid())
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId    String
+  tokenHash String   @unique
+  expiresAt DateTime
+  usedAt    DateTime?
+  createdAt DateTime @default(now())
+
+  @@index([userId])
+  @@index([expiresAt])
 }
 
 model Enrollment {
@@ -70,6 +86,9 @@ model Enrollment {
   updatedAt   DateTime         @updatedAt
   payments    Payment[]
 
+  // One enrolment per learner, per track, per cohort. Re-enrolling reuses the
+  // existing row rather than stacking up duplicates.
+  @@unique([userId, track, cohort])
   @@index([userId])
   @@index([status])
 }
@@ -97,6 +116,9 @@ model WaitlistEntry {
   id        String   @id @default(cuid())
   name      String
   email     String
+  // WhatsApp / phone number, stored normalised (e.g. "+2348108189514").
+  // Nullable only because entries captured before this field existed have none.
+  phone     String?
   track     Track?
   createdAt DateTime @default(now())
 

@@ -1,7 +1,7 @@
 import { Mail, ClipboardList } from "lucide-react";
 import { prisma } from "@/lib/prisma";
 import { getProgramByTrack } from "@/content/site";
-import { formatDate } from "@/lib/utils";
+import { formatDate, whatsappLink } from "@/lib/utils";
 
 export const dynamic = "force-dynamic";
 
@@ -39,6 +39,7 @@ export default async function AdminLeadsPage() {
                 <tr className="border-b border-ink-100 text-left text-xs uppercase tracking-wide text-ink-400">
                   <th className="px-5 py-3 font-semibold">Name</th>
                   <th className="px-5 py-3 font-semibold">Email</th>
+                  <th className="px-5 py-3 font-semibold">WhatsApp</th>
                   <th className="px-5 py-3 font-semibold">Interest</th>
                   <th className="px-5 py-3 font-semibold">Date</th>
                 </tr>
@@ -48,6 +49,20 @@ export default async function AdminLeadsPage() {
                   <tr key={w.id} className="text-ink-700">
                     <td className="px-5 py-3 font-medium text-ink-900">{w.name}</td>
                     <td className="px-5 py-3 text-ink-500">{w.email}</td>
+                    <td className="px-5 py-3">
+                      {w.phone ? (
+                        <a
+                          href={whatsappLink(w.phone)}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="font-medium text-primary-600 hover:text-primary-700"
+                        >
+                          {w.phone}
+                        </a>
+                      ) : (
+                        <span className="text-ink-400">&mdash;</span>
+                      )}
+                    </td>
                     <td className="px-5 py-3">
                       {w.track ? getProgramByTrack(w.track).shortName : "General"}
                     </td>

@@ -48,6 +48,25 @@ export function slugify(input: string): string {
     .slice(0, 80);
 }
 
+/**
+ * Normalise a phone number to E.164-ish form for WhatsApp links. Local
+ * Nigerian numbers ("0810 818 9514") become "+2348108189514"; numbers already
+ * carrying a country code are kept as-is minus the formatting characters.
+ */
+export function normalizePhone(input: string): string {
+  const raw = input.trim().replace(/[\s()\-.]/g, "");
+  const digits = raw.replace(/\D/g, "");
+  if (raw.startsWith("+")) return `+${digits}`;
+  if (digits.startsWith("0")) return `+234${digits.slice(1)}`;
+  if (digits.startsWith("234")) return `+${digits}`;
+  return `+${digits}`;
+}
+
+/** wa.me chat link for a stored phone number. */
+export function whatsappLink(phone: string): string {
+  return `https://wa.me/${normalizePhone(phone).replace(/\D/g, "")}`;
+}
+
 /** Rough reading-time estimate in minutes for a body of text. */
 export function readingTime(text: string): number {
   const words = text.trim().split(/\s+/).filter(Boolean).length;

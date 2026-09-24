@@ -1,12 +1,15 @@
 import "server-only";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
+import { createHash, randomBytes } from "node:crypto";
 import { SignJWT, jwtVerify } from "jose";
 import bcrypt from "bcryptjs";
 import { prisma } from "./prisma";
 
 const COOKIE_NAME = "oakvale_session";
 const MAX_AGE = 60 * 60 * 24 * 7; // 7 days
+/** How long a password reset link stays valid. */
+export const RESET_TOKEN_TTL_MINUTES = 60;
 
 function getSecret() {
   const secret = process.env.AUTH_SECRET;
@@ -101,4 +104,45 @@ export async function requireAdmin(): Promise<SessionPayload> {
   if (!session) redirect("/login?next=/admin");
   if (session.role !== "ADMIN") redirect("/dashboard");
   return session;
+}
+
+/* ------------------------------------------------------------------ *
+ * Password reset tokens
+ * ------------------------------------------------------------------ */
+
+/** Hash a raw reset token — only the hash is ever stored. */
+export function hashResetToken(token: string): string {
+  return createHash("sha256").update(token).digest("hex");
+}
+
+/**
+ * Issue a single-use reset token for a user. Any earlier unused tokens are
+ * invalidated so only the most recent emailed link works.
+ */
+export async function createPasswordResetToken(userId: string): Promise<string> {
+  const token = randomBytes(32).toString("base64url");
+  const expiresAt = new Date(Date.now() + RESET_TOKEN_TTL_MINUTES * 60 * 1000);
+
+  await prisma.$transaction([
+    prisma.passwordResetToken.updateMany({
+      where: { userId, usedAt: null },
+      data: { usedAt: new Date() },
+    }),
+    prisma.passwordResetToken.create({
+      data: { userId, tokenHash: hashResetToken(token), expiresAt },
+    }),
+  ]);
+
+  return token;
+}
+
+/** Look up a reset token's user, or null when it is unknown/used/expired. */
+export async function consumeablePasswordResetToken(token: string) {
+  if (!token) return null;
+  const record = await prisma.passwordResetToken.findUnique({
+    where: { tokenHash: hashResetToken(token) },
+    include: { user: true },
+  });
+  if (!record || record.usedAt || record.expiresAt <= new Date()) return null;
+  return record;
 }

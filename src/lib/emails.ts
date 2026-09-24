@@ -3,6 +3,7 @@ import type { Enrollment, User } from "@prisma/client";
 import { SITE, getProgramByTrack } from "@/content/site";
 import { formatNaira, formatDay } from "@/lib/utils";
 import { sendEmail } from "@/lib/email";
+import { RESET_TOKEN_TTL_MINUTES } from "@/lib/auth";
 
 const TEAM = "The Oakvale Learning Team";
 
@@ -182,6 +183,46 @@ ${TEAM}`;
     to: user.email,
     subject: "Enrolment Confirmed! Welcome to the Professional Childcare Programme",
     html: layout("Enrolment confirmed — welcome to the cohort!", bodyHtml),
+    text,
+  });
+}
+
+/** Password reset — single-use link, valid for RESET_TOKEN_TTL_MINUTES. */
+export async function sendPasswordResetEmail(
+  user: { name: string; email: string },
+  token: string
+): Promise<boolean> {
+  const link = `${appUrl()}/reset-password?token=${encodeURIComponent(token)}`;
+  const ttl =
+    RESET_TOKEN_TTL_MINUTES >= 60
+      ? `${RESET_TOKEN_TTL_MINUTES / 60} hour${RESET_TOKEN_TTL_MINUTES === 60 ? "" : "s"}`
+      : `${RESET_TOKEN_TTL_MINUTES} minutes`;
+
+  const bodyHtml =
+    p(`Dear ${user.name},`) +
+    p(`We received a request to reset the password for your ${SITE.name} account. Click the button below to choose a new one.`) +
+    button(link, "Reset my password") +
+    p(`This link expires in <strong>${ttl}</strong> and can only be used once.`) +
+    p(`If you did not request this, you can safely ignore this email — your password will stay unchanged.`) +
+    p(`Warm regards,<br/>${TEAM}`);
+
+  const text = `Dear ${user.name},
+
+We received a request to reset the password for your ${SITE.name} account.
+
+Reset your password here: ${link}
+
+This link expires in ${ttl} and can only be used once.
+
+If you did not request this, you can safely ignore this email — your password will stay unchanged.
+
+Warm regards,
+${TEAM}`;
+
+  return sendEmail({
+    to: user.email,
+    subject: `Reset your ${SITE.name} password`,
+    html: layout("Reset your password", bodyHtml),
     text,
   });
 }

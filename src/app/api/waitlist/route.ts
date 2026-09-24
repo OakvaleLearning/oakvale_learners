@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { waitlistSchema } from "@/lib/validation";
+import { normalizePhone } from "@/lib/utils";
 
 export async function POST(req: Request) {
   try {
@@ -12,9 +13,14 @@ export async function POST(req: Request) {
         { status: 400 }
       );
     }
-    const { name, email, track } = parsed.data;
+    const { name, email, phone, track } = parsed.data;
     await prisma.waitlistEntry.create({
-      data: { name, email, track: track ?? null },
+      data: {
+        name,
+        email,
+        phone: normalizePhone(phone),
+        track: track ?? null,
+      },
     });
     return NextResponse.json({ ok: true });
   } catch {
