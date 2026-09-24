@@ -43,7 +43,7 @@ Copy `.env.example` to `.env` and fill in values. Key variables:
 | `DATABASE_URL` | Postgres connection string |
 | `AUTH_SECRET` | Secret for signing session JWTs (min 16 chars) |
 | `PAYSTACK_SECRET_KEY` | Paystack **secret** key (`sk_test_…`) |
-| `NEXT_PUBLIC_PAYSTACK_PUBLIC_KEY` | Paystack **public** key (`pk_test_…`) |
+| `PAYSTACK_PUBLIC_KEY` | Paystack **public** key (`pk_test_…`) |
 | `NEXT_PUBLIC_APP_URL` | Base URL, e.g. `http://localhost:3000` |
 
 ### 3. Install, migrate, seed, run
