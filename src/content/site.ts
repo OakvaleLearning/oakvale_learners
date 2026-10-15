@@ -16,6 +16,9 @@ export const SITE = {
   balanceDueDate: "2026-09-29",
   // Free community / LMS platform learners get on full payment.
   communityUrl: "https://community.oakvalelearning.com",
+  // The Oakvale LMS app — handles enrolment, payment and self-paced learning.
+  // Until NEXT_PUBLIC_LMS_URL is set, enrol CTAs fall back to the contact page.
+  lmsUrl: process.env.NEXT_PUBLIC_LMS_URL || "/contact",
   socials: {
     instagram: "#",
     linkedin: "#",
@@ -42,12 +45,12 @@ export const NAV_LINKS = [
 
 export type TrackSlug = "adult-care" | "child-care";
 
-export interface ProgramModule {
-  title: string;
-  description: string;
-  bullets?: string[];
-}
-
+/**
+ * Legacy cohort checkout (Pay in Full / Instalments). No longer linked from the
+ * marketing pages — new enrolments go to the LMS app (SITE.lmsUrl). Kept so
+ * existing learners can still clear balances from their dashboard until they
+ * are migrated.
+ */
 export interface PricingCard {
   header: string;
   price: number; // Naira
@@ -56,6 +59,29 @@ export interface PricingCard {
   cta: string;
   featured?: boolean;
   plan: "FULL" | "SPLIT";
+}
+
+export type TierId = "foundation" | "professional" | "full";
+
+export interface ProgramTier {
+  id: TierId;
+  name: string;
+  price: number; // Naira
+  note?: string;
+  taglineLabel: string;
+  tagline: string;
+  learn: { title?: string; body: string }[];
+  roles: string;
+  deliverablesTitle: string;
+  deliverables: string[];
+  exclusions?: string[];
+  cta: string;
+  featured?: boolean;
+}
+
+export interface ProgramPhase {
+  title: string;
+  body: string;
 }
 
 export interface Program {
@@ -68,20 +94,33 @@ export interface Program {
   homeBody: string;
   homeCta: string;
   heroHeadline: string;
+  heroHeadlineAccent: string;
   heroBody: string;
-  badges: string[];
-  secondaryBody: string;
-  benefitsIntro: string;
-  whoIsThisFor: string[];
-  whatYouWillGain: string[];
-  howYouWillLearn: string[];
-  outlineIntro: string;
-  modules: ProgramModule[];
+  experienceBody: string;
+  phases: ProgramPhase[];
+  tiers: ProgramTier[];
+  /** Legacy cohort details — still shown on the checkout and learner dashboard. */
   details: { label: string; value: string }[];
   pricing: PricingCard[];
   accent: "primary" | "accent";
   heroImage?: { src: string; alt: string };
 }
+
+/** Where a tier's CTA sends the learner: the LMS app handles payment and learning. */
+export function tierHref(program: Program, tier: TierId): string {
+  if (!SITE.lmsUrl.startsWith("http")) return SITE.lmsUrl;
+  const url = new URL(SITE.lmsUrl);
+  url.searchParams.set("track", program.slug);
+  url.searchParams.set("tier", tier);
+  return url.toString();
+}
+
+const COMMUNITY_DELIVERABLE = "Access to the Oakvale Student WhatsApp Community.";
+const FULL_PROGRESSION = [
+  "Instant access to all Foundation and Professional modules combined.",
+  "Seamless, uninterrupted progression through all learning stages and assessments.",
+];
+const UPGRADE_PREREQ = "You must complete the Foundation tier before starting this phase.";
 
 export const ADULT_CARE: Program = {
   slug: "adult-care",
@@ -91,70 +130,122 @@ export const ADULT_CARE: Program = {
     src: "/adult-care-hero.jpg",
     alt: "A caregiver supporting an elderly patient with warmth and dignity",
   },
-  name: "Professional Adult & Elderly Care Programme",
+  name: "Adult & Elderly Care",
   shortName: "Adult Care",
-  homeHeadline: "Step Into Your Future with Our Adult Care Program",
+  homeHeadline: "Adult & Elderly Care",
   homeBody:
-    "Whether you are starting out, switching to a stable career, or ready for the next step, Oakvale's Adult Care program equips you with globally relevant clinical skills, hands on experience, and the confidence to succeed anywhere. Our immersive 10 week hybrid curriculum covers core principles, ethical communication, and best practices in adult care delivery, bridging the gap between where you are and where the healthcare world needs you. Join the next generation of verified professionals shaping the future of adult and elderly care.",
+    "Turn empathy into a recognised profession. Learn how to deliver safe, dignified, and clinical care for aging adults and recovering patients.",
   homeCta: "Explore Adult Care",
-  heroHeadline: "Professional Adult & Elderly Care Programme",
+  heroHeadline: "Become a Certified Adult Care Professional.",
+  heroHeadlineAccent: "On your terms.",
   heroBody:
-    "A 10 week, globally aligned course that trains you to deliver safe, dignified, and clinical care for aging adults and recovering patients. This program gives you a real pathway into premium employment or international care opportunities.",
-  badges: ["Accessible", "Future Proof", "Certified", "Affordable"],
-  secondaryBody:
-    "A structured 10 week programme that equips you with both the theoretical foundation and hands on competencies you need to deliver quality adult care at home, in the community, or abroad.",
-  benefitsIntro:
-    "Whether you are starting out, switching careers, or upskilling, this program gives you the specialized skills and certification to succeed in the rapidly growing adult care sector.",
-  whoIsThisFor: [
-    "New entrants to the health sector looking for a job ready pathway as care assistants or support workers.",
-    "People seeking global care work opportunities and relocation pathways.",
-    "Individuals switching into stable, high demand clinical careers.",
-    "Community based micro care entrepreneurs.",
-    "Employers training frontline healthcare staff.",
-  ],
-  whatYouWillGain: [
-    "Certified, job ready clinical skills in adult and elderly care.",
-    "Support with CVs, interviews, and global employment pathways.",
-    "Access to the Oakvale learning community and ongoing mentorship.",
-    "Real career opportunities in care at home or abroad via our Jobs Board.",
-    "The confidence and structural knowledge to start your own micro care business.",
-  ],
-  howYouWillLearn: [
-    "Flexible, person centered learning designed for busy schedules.",
-    "Self paced video modules on a mobile accessible learning platform.",
-    "Weekly live lessons and direct mentor support.",
-    "Peer discussion forums to grow alongside driven professionals.",
-    "Downloadable guides, clinical resources, and interactive scenarios.",
-  ],
-  outlineIntro:
-    "Over 10 weeks of engaging hybrid learning, you will gain both the theoretical foundation and hands on competencies you need to deliver high quality adult care, whether at home, in the community, or abroad.",
-  modules: [
+    "Get the practical skills, the clinical knowledge, and the professional certification you need to step into the healthcare sector with confidence. Oakvale trains you entirely at your own pace, so you can start learning the moment you are ready.",
+  experienceBody:
+    "You enrol and download the Oakvale app. You watch highly practical, pre-recorded masterclasses taught by healthcare experts. You take your assessments when you are ready. When you finish, you walk away with the competence to handle real-world caregiving, backed by a UK CPD Certificate and direct access to our Jobs Board.",
+  phases: [
     {
-      title: "Fundamental Principles & Standards",
-      description:
-        "Learn the heart of quality caregiving. Explore the professional and ethical principles that define excellent care, building your understanding of empathy driven communication and the critical importance of privacy and dignity.",
-      bullets: [
-        "Duty of Care",
-        "Communication Skills",
-        "Recordkeeping & Documentation",
-        "Confidentiality & Data Protection",
-        "Ethical Standards & Professional Conduct in Care",
+      title: "Phase 1: The Foundation",
+      body: "We start with the absolute basics. You will learn the core principles of duty of care, ethical communication, and how to protect a patient's dignity. This is where you build your confidence and learn what it actually means to be a professional caregiver.",
+    },
+    {
+      title: "Phase 2: Professional Mastery",
+      body: "Once you have the basics, we move to clinical realities. You will master infection prevention, complex daily routines, safe lifting, and the exact standards required by premium clinics, private clients, and top-tier care agencies. Finally, we train you on how to turn these skills into a profitable career.",
+    },
+  ],
+  tiers: [
+    {
+      id: "foundation",
+      name: "Foundation",
+      price: 35000,
+      taglineLabel: "The entry point",
+      tagline:
+        "Step confidently into the care sector. Master the essential skills to expertly care for loved ones or secure your first professional role.",
+      learn: [
+        {
+          title: "Fundamental Principles & Standards",
+          body: "Explore the professional and ethical principles that define excellent care. Master empathy-driven communication, recordkeeping, data protection, and the critical importance of privacy and dignity.",
+        },
+        {
+          title: "Best Practices in Care Delivery",
+          body: "Learn how to properly protect vulnerable adults, master infection control, and provide vital mental support for the elderly.",
+        },
       ],
+      roles:
+        "Basic, entry-level caregiving roles requiring minimal technical intervention.",
+      deliverablesTitle: "What you get",
+      deliverables: [
+        "Self-paced access to comprehensive foundation modules.",
+        "Exclusive masterclasses led by healthcare professionals.",
+        "Oakvale Learning Certificate of Completion (Foundation level).",
+        "An employer-facing letter of recommendation validating your core training hours.",
+        "Direct onboarding to the Oakvale Jobs Board for entry-level roles.",
+        COMMUNITY_DELIVERABLE,
+      ],
+      exclusions: [
+        "This tier is limited to basic care and does not qualify you for highly technical clinical care.",
+        "It restricts access to higher-paying senior roles.",
+        "It provides no business setup training.",
+        "The UK CPD Certificate is reserved for the full pathway.",
+      ],
+      cta: "Start Foundation",
     },
     {
-      title: "Best Practices in Care Delivery",
-      description:
-        "Learn how to properly protect vulnerable adults. Master infection control and the mental support needed for the elderly.",
+      id: "professional",
+      name: "Professional",
+      price: 70000,
+      note: "Prerequisite: Foundation Stage",
+      taglineLabel: "The mastery step",
+      tagline:
+        "You have the basics. Now elevate your expertise. Master advanced practical skills, increase your earning potential, and step into senior roles or entrepreneurship.",
+      learn: [
+        {
+          title: "Core Skills & Competencies",
+          body: "Master the practical, daily routines of adult caregiving. Fully prepare for the physical and clinical demands of the job, including safe lifting and mobility support.",
+        },
+        {
+          title: "Employability & Micro-Entrepreneurship in Care",
+          body: "Turn your training into a recognised, highly profitable career, complete with interview preparation and business structuring.",
+        },
+      ],
+      roles:
+        "Advanced, highly technical caregiving roles, senior placements, and the framework to launch an independent care business.",
+      deliverablesTitle: "What you get",
+      deliverables: [
+        "Self-paced access to advanced professional modules and real-world assessments.",
+        "Premium onboarding to the Oakvale Jobs Board to unlock higher-paying roles.",
+        "Career accelerator training (expert CV optimisation and interview coaching).",
+        "The Business Toolkit: Step-by-step training on how to launch your own caregiving agency.",
+        "UK CPD Certificate (awarded upon successful completion of this final stage).",
+        COMMUNITY_DELIVERABLE,
+      ],
+      exclusions: [UPGRADE_PREREQ],
+      cta: "Start Professional",
     },
     {
-      title: "Core Skills & Competencies",
-      description:
-        "Master the practical, daily routines of adult caregiving so you are fully prepared for the physical and clinical demands of the job, including safe lifting and mobility support.",
-    },
-    {
-      title: "Employability & Micro Entrepreneurship in Care",
-      description:
-        "We show you how to turn your training into a recognized, highly profitable career, complete with interview preparation and business structuring.",
+      id: "full",
+      name: "Full Programme",
+      price: 100000,
+      note: "Save ₦5,000",
+      taglineLabel: "The ultimate pathway",
+      tagline:
+        "No interruptions. No upgrade friction. Get instant access to the entire pathway from absolute beginner to a fully equipped care professional.",
+      learn: [
+        {
+          body: "The complete syllabus. Combines all foundational ethics with advanced clinical competencies and business structuring.",
+        },
+      ],
+      roles:
+        "Immediate, unrestricted pathway to premium technical roles, global standard compliance, and micro-entrepreneurship.",
+      deliverablesTitle: "Everything you get",
+      deliverables: [
+        ...FULL_PROGRESSION,
+        "The complete suite of practical training, career prep, and agency setup resources.",
+        "Oakvale Learning Certificate of Completion.",
+        "UK CPD Certificate (awarded upon successful completion).",
+        COMMUNITY_DELIVERABLE,
+      ],
+      cta: "Enrol in Full Programme",
+      featured: true,
     },
   ],
   details: [
@@ -194,90 +285,122 @@ export const CHILD_CARE: Program = {
     src: "/chilcare-hero.jpg",
     alt: "An early years caregiver nurturing a happy young child",
   },
-  name: "Professional Childcare & Early Years Programme",
-  shortName: "Child Care",
-  homeHeadline: "Step Into Your Future with Our Child Care Program",
+  name: "Childcare & Early Years",
+  shortName: "Childcare",
+  homeHeadline: "Childcare & Early Years",
   homeBody:
-    "Whether you are starting out, transitioning from informal care, or building a home based enterprise, Oakvale's Child Care program equips you with globally aligned early years skills, hands on placement experience, and the confidence to succeed anywhere. Our immersive 15 week hybrid curriculum covers early childhood development for ages 0 to 5, strict child safeguarding, and professional daily routines, bridging the gap between where you are and where the childcare world needs you. Join the next generation of verified professionals shaping the future of early childhood care.",
-  homeCta: "Explore Child Care",
-  heroHeadline: "Professional Childcare & Early Years Programme",
+    "From birth to five years. Master the developmental milestones and safety standards required to secure premium nursery roles, work for families, care for your own kids, or build your own childcare service.",
+  homeCta: "Explore Childcare",
+  heroHeadline: "Become a Certified Early Years Professional.",
+  heroHeadlineAccent: "On your terms.",
   heroBody:
-    "A 15 week, globally aligned course that trains you to deliver safe, nurturing, developmentally sound care for children aged 0 to 5. This program gives you a real pathway into employment or your own home based childcare service.",
-  badges: ["Professional", "Values Driven", "Competence", "Global"],
-  secondaryBody:
-    "A structured 15 week programme that equips you to deliver safe, nurturing, developmentally appropriate childcare for ages 0 to 5, and confidently transition into employment or home based childcare services.",
-  benefitsIntro:
-    "Whether you are starting out, switching careers, or moving from informal to professional care, this program gives you the skills and certification to succeed in early childhood care.",
-  whoIsThisFor: [
-    "Aspiring childcare workers and school leavers seeking a job ready pathway.",
-    "Nannies, nursery assistants, crèche staff, and home childcare providers.",
-    "Parents and family caregivers moving from informal to professional care.",
-    "Community caregivers, especially women and youth, seeking income growth.",
-  ],
-  whatYouWillGain: [
-    "A clear professional identity, role, boundaries, and duty of care.",
-    "Deep understanding of child development and milestones for ages 0 to 5.",
-    "Confidence in daily routines including feeding, hygiene, sleep, play, and communication.",
-    "Safety first practice including safeguarding, infection prevention, and food hygiene.",
-    "A clear pathway into employment or home based enterprise.",
-  ],
-  howYouWillLearn: [
-    "Blended delivery featuring interactive lessons, video demos, and guided placement.",
-    "Real life case studies grounded in African caregiving settings.",
-    "Role plays, scenarios, and reflective practice throughout.",
-    "Continuous assessment paired with a hands on capstone project.",
-  ],
-  outlineIntro:
-    "We start with who you are as a professional, moving through how children grow from birth to five, into keeping them safe, and finishing with your own career plan. Over 15 weeks of engaging hybrid learning, you will gain both the theoretical foundation and practical competencies you need to deliver high quality early years care.",
-  modules: [
+    "Get the practical skills, the developmental knowledge, and the professional certification you need to care for children safely and confidently. Oakvale trains you entirely at your own pace, so you can start learning the moment you are ready.",
+  experienceBody:
+    "You enrol and download the Oakvale app. You watch highly practical, pre-recorded masterclasses taught by childcare experts. You take your assessments when you are ready. When you finish, you walk away with the competence to handle real-world childcare, backed by a UK CPD Certificate and direct access to our Jobs Board.",
+  phases: [
     {
-      title: "Professional Identity, Values & Responsibilities (Weeks 1 to 2)",
-      description:
-        "Become the kind of childcare professional families trust. Be clear on your role, your boundaries, and the standards that protect children and your career.",
-      bullets: [
-        "Childcare as a Profession: Identity, Principles & Standards",
-        "The Role of the Childcare Worker",
-        "Duty of Care",
-        "Global Frameworks in Early Years Childcare",
-      ],
+      title: "Phase 1: Infant & Toddler Foundation (0–2 Years)",
+      body: "Become the kind of childcare professional families trust. We start with role boundaries and global frameworks, then move deeply into the brain growth, developmental milestones, and daily routines for infants and toddlers.",
     },
     {
-      title: "Foundations of Early Childhood Development 0 to 2 Years (Weeks 3 to 6)",
-      description:
-        "Learn how babies and toddlers grow so your care becomes intentional, not accidental, and every routine supports healthy development.",
-      bullets: [
-        "Holistic Child Development & Brain Growth",
-        "Caregiver Role in Child Development",
-        "Infant Development Milestones 0 to 12 Months",
-        "Daily Care Routines for 0 to 12 Months",
-        "Toddler Development Milestones 1 to 2 Years",
-        "Daily Care Routines for Toddlers 1 to 2 Years",
+      title: "Phase 2: Preschool Mastery (3–5 Years)",
+      body: "Once you have the basics, we build confidence in supporting preschoolers. You will master school readiness, spotting developmental red flags, fire and food safety, strict safeguarding protocols, and how to structure your own childcare business.",
+    },
+  ],
+  tiers: [
+    {
+      id: "foundation",
+      name: "Foundation",
+      price: 30000,
+      taglineLabel: "The entry point",
+      tagline:
+        "Build a rock-solid foundation in infant and toddler care. Perfect for starting your career journey or mastering the basics for your own family.",
+      learn: [
+        {
+          title: "Professional Identity, Values & Responsibilities",
+          body: "Be clear on your role, your boundaries, your duty of care, and the global frameworks that protect children and your career.",
+        },
+        {
+          title: "Foundations of Early Childhood Development (0 to 2 Years)",
+          body: "Learn how babies and toddlers grow so your care becomes intentional. Master brain growth, infant/toddler developmental milestones, and daily care routines for the first 24 months.",
+        },
       ],
+      roles:
+        "Basic childcare roles and early-growth nanny positions specifically limited to infants and toddlers (0–2 years).",
+      deliverablesTitle: "What you get",
+      deliverables: [
+        "Self-paced access to comprehensive early years foundation modules.",
+        "Exclusive masterclasses led by childcare professionals.",
+        "Oakvale Learning Certificate of Completion (Foundation level).",
+        "An employer-facing letter of recommendation validating your core training hours.",
+        "Direct onboarding to the Oakvale Jobs Board for entry-level childcare roles.",
+        COMMUNITY_DELIVERABLE,
+      ],
+      exclusions: [
+        "This tier does not cover preschool development (3–5 years).",
+        "It does not qualify you for advanced nursery roles or school readiness programmes.",
+        "It provides no independent business setup training.",
+        "The UK CPD Certificate is reserved for the full pathway.",
+      ],
+      cta: "Start Foundation",
     },
     {
-      title: "Development, Safety & Child Protection 3 to 5 Years (Weeks 7 to 10)",
-      description:
-        "Build confidence supporting preschoolers. Master school readiness, spotting red flags early, and keeping every child safe through professional daily practice.",
-      bullets: [
-        "Developmental Growth from 3 to 5 Years",
-        "Recognising Developmental Delays & When to Act",
-        "Health, Safety & Infection Prevention",
-        "Fire Safety & Food Hygiene",
-        "Professional Communication Skills",
-        "Safeguarding Children from Harm, Neglect & Abuse",
-        "Recordkeeping & Information Governance",
+      id: "professional",
+      name: "Professional",
+      price: 55000,
+      note: "Prerequisite: Foundation Stage",
+      taglineLabel: "The mastery step",
+      tagline:
+        "You have the basics. Now unlock advanced opportunities. Master the complete birth-to-five spectrum and position yourself for premium childcare roles.",
+      learn: [
+        {
+          title: "Development, Safety & Child Protection (3 to 5 Years)",
+          body: "Build confidence supporting preschoolers. Master school readiness, spotting developmental delays early, fire safety, food hygiene, and strict safeguarding against harm and neglect.",
+        },
+        {
+          title: "Career Pathways & Professional Growth",
+          body: "Finish with a clear plan for interviews, an extended capstone project, and pathways for employment or launching your own home-based micro childcare service.",
+        },
       ],
+      roles:
+        "Advanced nursery roles, premium placements across the full 0–5 spectrum, and the framework to launch an independent home-based childcare service.",
+      deliverablesTitle: "What you get",
+      deliverables: [
+        "Self-paced access to advanced professional modules and the final childcare capstone.",
+        "Premium onboarding to the Oakvale Jobs Board to unlock higher-paying professional childcare roles.",
+        "Career accelerator training (expert CV optimisation and interview coaching).",
+        "The Business Toolkit: Step-by-step training on how to launch your own home-based micro childcare service.",
+        "UK CPD Certificate (awarded upon successful completion of this final stage).",
+        COMMUNITY_DELIVERABLE,
+      ],
+      exclusions: [UPGRADE_PREREQ],
+      cta: "Start Professional",
     },
     {
-      title: "Career Pathways & Professional Growth (Weeks 11 to 15)",
-      description:
-        "Finish with a clear plan and real confidence for interviews and workplace expectations, plus an extended capstone and placement period proving you can apply everything you have learned.",
-      bullets: [
-        "Reflective Practice & Continuous Professional Development",
-        "Employment & Self Employment Pathways",
-        "Capstone Project including supervised placement",
-        "Career Planning & Transition to Practice",
+      id: "full",
+      name: "Full Programme",
+      price: 80000,
+      note: "Save ₦5,000",
+      taglineLabel: "The ultimate pathway",
+      tagline:
+        "The complete birth-to-five mastery pathway. Go from beginner to a fully equipped, confident early years professional without any upgrade friction.",
+      learn: [
+        {
+          body: "The complete birth-to-five mastery syllabus, merging infant care basics with preschool safeguarding, capstone projects, and business planning.",
+        },
       ],
+      roles:
+        "The complete suite of opportunities across all early years age groups and micro-entrepreneurship.",
+      deliverablesTitle: "Everything you get",
+      deliverables: [
+        ...FULL_PROGRESSION,
+        "The complete suite of practical training, capstone projects, career prep, and agency setup resources.",
+        "Oakvale Learning Certificate of Completion.",
+        "UK CPD Certificate (awarded upon successful completion).",
+        COMMUNITY_DELIVERABLE,
+      ],
+      cta: "Enrol in Full Programme",
+      featured: true,
     },
   ],
   details: [
@@ -322,11 +445,11 @@ export function getProgramByTrack(track: "ADULT_CARE" | "CHILD_CARE"): Program {
 export const WHY_OAKVALE = [
   {
     title: "Classes That Fit Your Life",
-    body: "Learn remotely on your phone or computer, at your own pace, with weekly live recaps to keep you on track.",
+    body: "Learn on the Oakvale app at your own pace. Watch practical masterclasses and complete your modules whenever you have the time.",
   },
   {
     title: "Supportive Community",
-    body: "Your instructor, mentor, and peers are with you every step, from your first lesson to your capstone project.",
+    body: "Self-paced does not mean learning alone. Every learner joins the Oakvale Student WhatsApp Community to share progress and ask our coordinators questions.",
   },
   {
     title: "Career Ready From Day One",
@@ -378,10 +501,10 @@ export const CAREER_PATHS: CareerPath[] = [
     slug: "career-reset",
     kicker: "Career Reset",
     title: "Switch into a career that actually holds a future",
-    body: "Changing direction is not starting over. In as little as 10 weeks of flexible, hybrid learning, you can move from an uncertain job into a stable, in-demand clinical career — no prior healthcare experience required.",
+    body: "Changing direction is not starting over. With self-paced learning that fits around your life, you can move from an uncertain job into a stable, in-demand clinical career — no prior healthcare experience required.",
     points: [
       "Beginner-friendly, no prior experience needed",
-      "Flexible hybrid learning built around busy schedules",
+      "Self-paced learning built around busy schedules",
       "A clear path from where you are to where you want to be",
     ],
     image: "/career_reset.jpg",
@@ -442,17 +565,4 @@ export const GLOBAL_DEMAND = {
       body: "Worldwide, the WHO predicts a shortage of 15 million trained care workers in just a few years, especially in underserved regions.",
     },
   ] satisfies DemandStat[],
-};
-
-export const GET_CERTIFIED = {
-  headline: "Get Certified",
-  subheadline: "Turn Caregiving Experience Into a Recognised Career",
-  body: "Whether you are new to childcare or have years of informal experience, this programme gives you the certificate, the confidence, and the community to take your next step.",
-  items: [
-    "Certificate in Early Years Childcare 0 to 5 Years",
-    "Support with CVs, interviews, and job placement",
-    "Guidance to start your own home based micro childcare service",
-    "Access to the Oakvale Learning community and mentor support",
-    "Access to placement via our Jobs Board platform",
-  ],
 };

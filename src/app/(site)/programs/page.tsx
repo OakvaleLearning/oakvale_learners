@@ -10,13 +10,12 @@ import { ADULT_CARE, CHILD_CARE, type Program } from "@/content/site";
 export const metadata: Metadata = {
   title: "Programs",
   description:
-    "Explore Oakvale Learning's certified caregiving tracks: Professional Adult & Elderly Care and Professional Childcare & Early Years.",
+    "Explore Oakvale Learning's self-paced, certified care tracks: Adult & Elderly Care and Childcare & Early Years.",
 };
 
 const cardMeta = {
   "adult-care": {
     Icon: Heart,
-    duration: "10 Weeks",
     iconBg: "bg-primary-600",
     accentText: "text-primary-700",
     btn: "bg-primary-600 hover:bg-primary-700 shadow-primary-600/30",
@@ -24,7 +23,6 @@ const cardMeta = {
   },
   "child-care": {
     Icon: Baby,
-    duration: "15 Weeks",
     iconBg: "bg-accent-500",
     accentText: "text-accent-600",
     btn: "bg-accent-500 hover:bg-accent-600 shadow-accent-500/30",
@@ -35,7 +33,10 @@ const cardMeta = {
 function ProgramCard({ program, delay }: { program: Program; delay: number }) {
   const m = cardMeta[program.slug];
   const Icon = m.Icon;
-  const highlights = program.whatYouWillGain.slice(0, 4);
+  const highlights = [
+    ...program.phases.map((p) => p.title),
+    "UK CPD Certificate on completing the full pathway",
+  ];
   return (
     <Reveal delay={delay} className="h-full">
       <div
@@ -47,7 +48,7 @@ function ProgramCard({ program, delay }: { program: Program; delay: number }) {
           </span>
           <span className="inline-flex items-center gap-1.5 rounded-full bg-ink-50 px-3 py-1.5 text-xs font-semibold text-ink-600">
             <Clock className="size-3.5" />
-            {m.duration} · Hybrid
+            Self-paced
           </span>
         </div>
         <div className="flex flex-1 flex-col p-8 pt-6">
@@ -58,7 +59,7 @@ function ProgramCard({ program, delay }: { program: Program; delay: number }) {
             {program.name}
           </h3>
           <p className="mt-3 text-[15px] leading-relaxed text-ink-600">
-            {program.heroBody}
+            {program.homeBody}
           </p>
 
           <ul className="mt-6 space-y-2.5">
@@ -92,8 +93,8 @@ export default function ProgramsPage() {
           alt: "About us"
         }}
         kicker="Certified Caregiving Tracks"
-        title="Two paths. One verified future in care."
-        description="Whether your calling is caring for aging adults or nurturing the next generation, Oakvale gives you globally aligned skills, hands-on placement, and real career pathways."
+        title="Pick your discipline."
+        description="We offer two specialised tracks. Pick the one that fits your goals, select the entry stage that fits your budget, and start immediately."
       />
 
       <section className="py-20 sm:py-24">

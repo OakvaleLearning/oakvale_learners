@@ -37,10 +37,8 @@ export function Footer() {
                 Stay in the Loop
               </h3>
               <p className="mt-3 max-w-md text-ink-300">
-                Join our waiting list and we will keep you updated on upcoming
-                cohorts, scholarships, and learning events. Learning spots are
-                issued on a cohort basis. We accept applicants on a first served
-                basis.
+                Join our mailing list and we will keep you updated on new
+                courses, scholarships, and learning events.
               </p>
             </div>
             <WaitlistForm variant="footer" />
@@ -52,8 +50,8 @@ export function Footer() {
           <div>
             <Logo dark />
             <p className="mt-4 max-w-xs text-sm leading-relaxed text-ink-400">
-              Transforming aspiring caregivers into verified healthcare
-              professionals through globally aligned, hands-on certification.
+              Training aspiring caregivers to become verified, confident care
+              professionals, entirely at their own pace.
             </p>
             <div className="mt-6 flex gap-3">
               {[

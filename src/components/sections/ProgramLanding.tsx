@@ -4,30 +4,33 @@ import Link from "next/link";
 import Image from "next/image";
 import {
   ArrowRight,
-  Clock,
-  Users,
-  Trophy,
-  BookOpen, 
-  GraduationCap,
+  BookOpen,
+  Smartphone,
+  PlayCircle,
+  ClipboardCheck,
+  Award,
+  MessagesSquare,
 } from "lucide-react";
 import { Container } from "@/components/ui/Container";
 import { SectionHeading } from "@/components/ui/SectionHeading";
 import { Kicker } from "@/components/ui/SectionHeading";
-import { CheckList } from "@/components/ui/CheckList";
-import { Marquee } from "@/components/ui/Marquee";
 import { Reveal, Stagger, StaggerItem, motion } from "@/components/ui/motion";
-import { ModuleAccordion } from "./ModuleAccordion";
 import { PricingCards } from "./PricingCards";
 import { CTABand } from "./CTABand";
-import { GET_CERTIFIED, type Program } from "@/content/site";
+import type { Program } from "@/content/site";
 import { cn } from "@/lib/utils";
 
 const easeOutExpo = [0.16, 1, 0.3, 1] as const;
 
+const EXPERIENCE_STEPS = [
+  { Icon: Smartphone, title: "Enrol and download the Oakvale app" },
+  { Icon: PlayCircle, title: "Watch practical, pre-recorded masterclasses" },
+  { Icon: ClipboardCheck, title: "Take your assessments when you are ready" },
+  { Icon: Award, title: "Graduate with a UK CPD Certificate and Jobs Board access" },
+];
+
 export function ProgramLanding({ program }: { program: Program }) {
   const isAdult = program.slug === "adult-care";
-  const accentText = isAdult ? "text-primary-400" : "text-accent-400";
-  const enrollHref = `/enroll/${program.slug}?plan=full`;
 
   return (
     <>
@@ -63,7 +66,10 @@ export function ProgramLanding({ program }: { program: Program }) {
               transition={{ duration: 0.75, ease: easeOutExpo, delay: 0.06 }}
               className="mt-6 text-4xl font-black leading-[1.06] tracking-tight sm:text-5xl md:text-6xl"
             >
-              {program.heroHeadline}
+              {program.heroHeadline}{" "}
+              <span className={isAdult ? "text-primary-300" : "text-accent-400"}>
+                {program.heroHeadlineAccent}
+              </span>
             </motion.h1>
             <motion.p
               initial={{ opacity: 0, y: 18 }}
@@ -80,10 +86,10 @@ export function ProgramLanding({ program }: { program: Program }) {
               className="mt-9 flex flex-col gap-3 sm:flex-row"
             >
               <Link
-                href={enrollHref}
+                href="#pricing"
                 className="inline-flex items-center justify-center gap-2 rounded-full bg-accent-500 px-8 py-4 text-base font-semibold text-white shadow-lg shadow-accent-500/30 transition-all hover:-translate-y-0.5 hover:bg-accent-600"
               >
-                Enroll Now
+                View Your Options
                 <ArrowRight className="size-5" />
               </Link>
               <Link
@@ -98,84 +104,37 @@ export function ProgramLanding({ program }: { program: Program }) {
         </Container> 
       </section>
 
-      {/* PROGRAM BENEFITS */}
+      {/* THE EXPERIENCE */}
       <section className="py-20 sm:py-24">
         <Container>
-          <SectionHeading
-            kicker="Program Benefits"
-            title="Skills and certification that open doors"
-            description={program.benefitsIntro}
-          />
-          <div className="mt-14 grid gap-10 lg:grid-cols-3">
-            <BenefitColumn
-              Icon={Users}
-              title="Who Is This For?"
-              items={program.whoIsThisFor}
-            />
-            <BenefitColumn
-              Icon={Trophy}
-              title="What You Will Gain"
-              items={program.whatYouWillGain}
-            />
-            <BenefitColumn
-              Icon={GraduationCap}
-              title="How You Will Learn"
-              items={program.howYouWillLearn}
-            />
-          </div>
-        </Container>
-      </section>
-
-      {/* CURRICULUM / MODULES */}
-      <section id="curriculum" className="bg-ink-50 py-20 sm:py-24">
-        <Container>
-          <SectionHeading
-            kicker="Program Outline"
-            title="Your curriculum, module by module"
-            description={program.outlineIntro}
-          />
-          <div className="mx-auto mt-14 max-w-4xl">
-            <ModuleAccordion modules={program.modules} accent={program.accent} />
-          </div>
-        </Container>
-      </section>
-
-      {/* PROGRAM DETAILS */}
-      <section className="py-20 sm:py-24">
-        <Container>
-          <div className="grid gap-10 lg:grid-cols-[1fr_1.1fr] lg:items-center">
+          <div className="grid gap-12 lg:grid-cols-[1fr_1.1fr] lg:items-center">
             <Reveal>
               <SectionHeading
                 align="left"
-                kicker="Program Details"
-                title="Everything you need to know"
+                kicker="The Experience"
+                title="How you will actually learn."
               />
               <p className="mt-5 text-[15px] leading-relaxed text-ink-600">
-                A structured, hybrid programme combining self-paced learning with
-                live sessions, mentorship, and hands-on practice — designed to
-                take you from where you are to a recognised, job-ready
-                professional.
+                {program.experienceBody}
               </p>
-              <Link
-                href={enrollHref}
-                className="mt-8 inline-flex items-center gap-2 rounded-full bg-primary-600 px-7 py-3.5 text-sm font-semibold text-white shadow-lg shadow-primary-600/30 transition-all hover:-translate-y-0.5 hover:bg-primary-700"
-              >
-                Enroll Now
-                <ArrowRight className="size-4" />
-              </Link>
+              <p className="mt-6 text-lg font-semibold text-ink-900">
+                Oakvale does the teaching. The app just makes it fit your life.
+              </p>
             </Reveal>
 
             <Stagger className="grid gap-4 sm:grid-cols-2">
-              {program.details.map((d) => (
-                <StaggerItem key={d.label}>
+              {EXPERIENCE_STEPS.map((step, i) => (
+                <StaggerItem key={step.title}>
                   <div className="h-full rounded-3xl border border-ink-100 bg-white p-6">
-                    <div className="flex items-center gap-2 text-xs font-semibold uppercase tracking-wide text-accent-500">
-                      <Clock className="size-3.5" />
-                      {d.label}
+                    <div className="flex items-center justify-between">
+                      <span className="grid size-11 place-items-center rounded-2xl bg-primary-50 text-primary-600">
+                        <step.Icon className="size-5" />
+                      </span>
+                      <span className="text-xs font-semibold text-ink-400">
+                        0{i + 1}
+                      </span>
                     </div>
-                    <div className="mt-2 text-lg font-bold text-ink-900">
-                      {d.value}
-                    </div>
+                    <div className="mt-4 font-bold text-ink-900">{step.title}</div>
                   </div>
                 </StaggerItem>
               ))}
@@ -184,77 +143,86 @@ export function ProgramLanding({ program }: { program: Program }) {
         </Container>
       </section>
 
-      {/* PRICING */}
-      <section id="pricing" className="bg-ink-50 py-20 sm:py-24">
+      {/* CURRICULUM LADDER */}
+      <section id="curriculum" className="bg-ink-50 py-20 sm:py-24">
         <Container>
           <SectionHeading
-            kicker="Choose Your Payment Plan"
-            title="Secure your seat in Cohort 2 today"
-            description="Select the payment option that works best for you and lock in your place in the upcoming cohort."
+            kicker="The Curriculum"
+            title="From absolute beginner to job-ready."
+            description="We don't just throw information at you. We build your competence in stages."
           />
-          <div className="mx-auto mt-14 max-w-4xl">
-            <PricingCards program={program} />
-          </div>
+          <Stagger className="mx-auto mt-14 grid max-w-5xl gap-6 md:grid-cols-2">
+            {program.phases.map((phase, i) => (
+              <StaggerItem key={phase.title}>
+                <div className="h-full rounded-4xl border border-ink-100 bg-white p-8">
+                  <span
+                    className={cn(
+                      "grid size-12 place-items-center rounded-2xl text-lg font-black text-white",
+                      isAdult ? "bg-primary-600" : "bg-accent-500"
+                    )}
+                  >
+                    {i + 1}
+                  </span>
+                  <h3 className="mt-5 text-xl font-bold text-ink-900">
+                    {phase.title}
+                  </h3>
+                  <p className="mt-3 text-[15px] leading-relaxed text-ink-600">
+                    {phase.body}
+                  </p>
+                </div>
+              </StaggerItem>
+            ))}
+          </Stagger>
         </Container>
       </section>
 
-      {/* GET CERTIFIED */}
+      {/* COMMUNITY */}
       <section className="py-20 sm:py-24">
         <Container>
           <div className="relative overflow-hidden rounded-4xl border border-ink-100 bg-white p-8 shadow-sm sm:p-12">
-            <div className="grid gap-10 lg:grid-cols-2 lg:items-center">
+            <div className="grid gap-8 lg:grid-cols-[auto_1fr] lg:items-center">
+              <span className="grid size-16 place-items-center rounded-3xl bg-accent-50 text-accent-600">
+                <MessagesSquare className="size-8" />
+              </span>
               <Reveal>
-                <Kicker>{GET_CERTIFIED.headline}</Kicker>
+                <Kicker>You Are Not Alone</Kicker>
                 <h2 className="mt-4 text-3xl font-bold tracking-tight text-ink-900 sm:text-4xl">
-                  {GET_CERTIFIED.subheadline}
+                  Self-paced does not mean learning alone.
                 </h2>
-                <p className="mt-4 text-[15px] leading-relaxed text-ink-600">
-                  {GET_CERTIFIED.body}
+                <p className="mt-4 max-w-3xl text-[15px] leading-relaxed text-ink-600">
+                  We know learning by yourself can feel isolating. That is why
+                  every Oakvale learner gets exclusive access to our Oakvale
+                  Student WhatsApp Community. Connect with other participants
+                  taking the same course, share your progress, ask questions
+                  directly to our coordinators, and build a network of driven
+                  professionals just like you.
                 </p>
-                <div className="mt-7 inline-flex items-center gap-3 rounded-2xl border border-accent-100 bg-accent-50 px-5 py-4">
-                  <p className="text-sm font-medium text-accent-800">
-                    {program.details.find((d) => d.label === "Credential")?.value}
-                  </p>
-                </div>
-              </Reveal>
-              <Reveal delay={0.1}>
-                <CheckList items={GET_CERTIFIED.items} />
               </Reveal>
             </div>
           </div>
         </Container>
       </section>
 
+      {/* ENTRY POINTS */}
+      <section id="pricing" className="bg-ink-50 py-20 sm:py-24">
+        <Container>
+          <SectionHeading
+            kicker="Pricing"
+            title="Choose your entry point"
+            description="Every journey is different. Pick the entry point that matches your current budget and career goals. You can always upgrade as your skills grow."
+          />
+          <div className="mt-14">
+            <PricingCards program={program} />
+          </div>
+        </Container>
+      </section>
+
       <CTABand
         title={`Ready to start your ${program.shortName} journey?`}
-        description="Spots in Cohort 2 are issued on a first-served basis. Secure yours today."
-        primaryHref={enrollHref}
-        primaryLabel="Enroll Now"
+        description="Start learning the moment you are ready. Pick your entry point and go at your own pace."
+        primaryHref="#pricing"
+        primaryLabel="Choose Your Entry Point"
       />
     </>
-  );
-}
-
-function BenefitColumn({
-  Icon,
-  title,
-  items,
-}: {
-  Icon: React.ElementType;
-  title: string;
-  items: string[];
-}) {
-  return (
-    <Reveal className="h-full">
-      <div className="h-full rounded-4xl border border-ink-100 bg-white p-8">
-        <span className="grid size-12 place-items-center rounded-2xl bg-primary-50 text-primary-600">
-          <Icon className="size-6" />
-        </span>
-        <h3 className="mt-5 text-xl font-bold text-ink-900">{title}</h3>
-        <div className="mt-5">
-          <CheckList items={items} />
-        </div>
-      </div>
-    </Reveal>
   );
 }

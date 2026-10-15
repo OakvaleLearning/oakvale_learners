@@ -5,9 +5,9 @@ import { Reveal } from "@/components/ui/motion";
 
 export function CTABand({
   title = "Ready to step into your future?",
-  description = "Secure your seat in Cohort 2. Choose the track that fits your goals and start your journey to a verified caregiving career.",
+  description = "Pick your pathway, choose the entry stage that fits your budget, and start learning today, entirely on your schedule.",
   primaryHref = "/programs",
-  primaryLabel = "Enroll Now",
+  primaryLabel = "Choose Your Pathway",
   secondaryHref = "/contact",
   secondaryLabel = "Talk to us",
 }: {
@@ -23,9 +23,9 @@ export function CTABand({
       <Container>
         <Reveal>
           <div className="relative overflow-hidden rounded-4xl bg-brand-gradient px-6 py-14 text-center shadow-2xl shadow-primary-900/30 sm:px-16 sm:py-20">
-            <div className="pointer-events-none absolute inset-0 bg-grid opacity-30" />
-            <div className="pointer-events-none absolute -left-20 -top-20 size-72 rounded-full bg-accent-500/30 blur-3xl" />
-            <div className="pointer-events-none absolute -bottom-24 -right-16 size-72 rounded-full bg-primary-400/30 blur-3xl" />
+            {/* <div className="pointer-events-none absolute inset-0 bg-grid opacity-30" /> */}
+            {/* <div className="pointer-events-none absolute -left-20 -top-20 size-72 rounded-full bg-accent-500/30 blur-3xl" /> */}
+            {/* <div className="pointer-events-none absolute -bottom-24 -right-16 size-72 rounded-full bg-primary-400/30 blur-3xl" /> */}
             <div className="relative mx-auto max-w-2xl">
               <h2 className="text-3xl font-bold tracking-tight text-white sm:text-4xl">
                 {title}

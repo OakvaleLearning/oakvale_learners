@@ -8,7 +8,6 @@ import { ADULT_CARE, CHILD_CARE, type Program } from "@/content/site";
 const meta = {
   "adult-care": {
     Icon: Heart,
-    duration: "10 Weeks",
     ring: "hover:border-primary-300",
     glow: "bg-primary-500/15",
     iconBg: "bg-primary-600",
@@ -17,7 +16,6 @@ const meta = {
   },
   "child-care": {
     Icon: Baby,
-    duration: "15 Weeks",
     ring: "hover:border-accent-300",
     glow: "bg-accent-500/15",
     iconBg: "bg-accent-500",
@@ -45,7 +43,7 @@ function TrackCard({ program, delay }: { program: Program; delay: number }) {
             className={`inline-flex items-center gap-1.5 rounded-full px-3 py-1.5 text-xs font-semibold ring-1 ${m.tag}`}
           >
             <Clock className="size-3.5" />
-            {m.duration} · Hybrid
+            Self-paced
           </span>
         </div>
 
@@ -73,9 +71,9 @@ export function TrackBlocks() {
     <section id="tracks" className="relative py-20 sm:py-28">
       <Container>
         <SectionHeading
-          kicker="Choose Your Path"
-          title="Our Certified Caregiving Tracks"
-          description="We offer two specialized training tracks designed to transform you into a verified healthcare professional. Choose the path that aligns with your career goals and step into a high demand clinical role."
+          kicker="Choose Your Pathway"
+          title="Pick your discipline."
+          description="We offer two specialised tracks. Pick the one that fits your goals, select the entry stage that fits your budget, and start immediately."
         />
         <div className="mt-14 grid gap-6 lg:grid-cols-2 lg:gap-8">
           <TrackCard program={ADULT_CARE} delay={0} />

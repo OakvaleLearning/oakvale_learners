@@ -10,7 +10,7 @@ const easeOutExpo = [0.16, 1, 0.3, 1] as const;
 const stats = [
   { value: "2", label: "Certified Tracks" },
   { value: "0–5", label: "Early Years Focus" },
-  { value: "100%", label: "Hybrid Learning" },
+  { value: "100%", label: "Self-Paced" },
 ];
 
 export function Hero() {
@@ -51,22 +51,25 @@ export function Hero() {
             transition={{ duration: 0.75, ease: easeOutExpo, delay: 0.08 }}
             className="mt-6 text-4xl font-black leading-[1.05] tracking-tight text-white sm:text-5xl md:text-6xl lg:text-[4.25rem]"
           >
-            Step into a{" "}
-            <span className="relative whitespace-nowrap">
-              <span className="text-accent-400">verified</span>
-            </span>{" "}
-            healthcare career
+            Build a <span className="text-accent-400">certified</span> care
+            career.
+            <span className="mt-3 block text-2xl font-bold leading-snug text-ink-100 sm:text-3xl md:text-4xl">
+              Start today, entirely on your schedule.
+            </span>
           </motion.h1>
 
           <motion.p
             initial={{ opacity: 0, y: 22 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.7, ease: easeOutExpo, delay: 0.18 }}
-            className="mt-6 max-w-xl text-lg leading-relaxed text-ink-200"
+            className="mt-6 max-w-2xl text-lg leading-relaxed text-ink-200"
           >
-            Oakvale Learning transforms aspiring caregivers into globally
-            recognised professionals — with hands-on placement, mentorship, and
-            real career pathways in Adult and Child Care.
+            You don&apos;t need a medical background to build a secure,
+            meaningful future in healthcare. Oakvale Learning trains you to
+            become a verified, confident care professional. With our self-paced
+            platform, you gain the exact skills needed to work in premium local
+            clinics, expertly care for loved ones and employer families, or
+            launch your own care service.
           </motion.p>
 
           <motion.div
@@ -75,8 +78,8 @@ export function Hero() {
             transition={{ duration: 0.7, ease: easeOutExpo, delay: 0.28 }}
             className="mt-9 flex flex-col gap-3 sm:flex-row sm:items-center"
           >
-            <ButtonLink href="/programs" variant="accent" size="lg">
-              Explore Programs
+            <ButtonLink href="#tracks" variant="accent" size="lg">
+              Choose Your Pathway
               <ArrowRight className="size-5" />
             </ButtonLink>
             <ButtonLink
