@@ -6,7 +6,7 @@
 export const SITE = {
   name: "Oakvale Learning",
   tagline: "Certified Caregiving Training",
-  email: "hello@oakvalelearning.com",
+  email: "hello@oakvaleltd.com",
   phone: "+234 810 818 9514",
   address: "Lagos, Nigeria",
   cohort: "Cohort 2",
@@ -15,7 +15,7 @@ export const SITE = {
   // Deadline for the 2nd (final) instalment on SPLIT plans.
   balanceDueDate: "2026-09-29",
   // Free community / LMS platform learners get on full payment.
-  communityUrl: "https://community.oakvalelearning.com",
+  communityUrl: "https://community.oakvaleltd.com",
   // The Oakvale LMS app — handles enrolment, payment and self-paced learning.
   // Until NEXT_PUBLIC_LMS_URL is set, enrol CTAs fall back to the contact page.
   lmsUrl: process.env.NEXT_PUBLIC_LMS_URL || "/contact",
