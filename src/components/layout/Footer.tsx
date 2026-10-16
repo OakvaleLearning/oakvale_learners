@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { Mail, MapPin, Phone } from "lucide-react";
+import { ArrowRight, Mail, MapPin, Phone } from "lucide-react";
 import {
   InstagramIcon,
   LinkedinIcon,
@@ -8,7 +8,6 @@ import {
 } from "@/components/ui/BrandIcons";
 import { SITE } from "@/content/site";
 import { Logo } from "./Logo";
-import { WaitlistForm } from "@/components/sections/WaitlistForm";
 
 const programLinks = [
   { label: "Adult & Elderly Care", href: "/programs/adult-care" },
@@ -29,19 +28,33 @@ export function Footer() {
     <footer className="relative overflow-hidden bg-ink-950 text-ink-300">
       <div className="pointer-events-none absolute inset-0 bg-mesh opacity-40" />
       <div className="relative">
-        {/* Waitlist / Stay in the loop */}
+        {/* Sign-up CTA */}
         <div className="border-b border-white/10">
           <div className="mx-auto grid max-w-6xl gap-8 px-5 py-14 sm:px-8 lg:grid-cols-2 lg:items-center">
             <div>
               <h3 className="text-2xl font-bold text-white sm:text-3xl">
-                Stay in the Loop
+                Start Learning Today
               </h3>
               <p className="mt-3 max-w-md text-ink-300">
-                Join our mailing list and we will keep you updated on new
-                courses, scholarships, and learning events.
+                Create your account now and begin your caregiving training
+                straight away, entirely at your own pace.
               </p>
             </div>
-            <WaitlistForm variant="footer" />
+            <div className="flex flex-wrap gap-3 lg:justify-end">
+              <Link
+                href="/signup"
+                className="inline-flex items-center justify-center gap-2 rounded-full bg-accent-500 px-6 py-3.5 text-sm font-semibold text-white shadow-lg shadow-accent-500/30 transition-all hover:bg-accent-600 hover:-translate-y-0.5"
+              >
+                Sign Up Now
+                <ArrowRight className="size-4" />
+              </Link>
+              <Link
+                href="/programs"
+                className="inline-flex items-center justify-center gap-2 rounded-full border border-white/20 px-6 py-3.5 text-sm font-semibold text-white transition-all hover:bg-white/10"
+              >
+                Explore Programs
+              </Link>
+            </div>
           </div>
         </div>
 

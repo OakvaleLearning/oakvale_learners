@@ -141,7 +141,7 @@ export function AuthForm({ mode }: { mode: "login" | "signup" }) {
         {isSignup ? (
           <p className="text-xs text-ink-400">
             Use at least 8 characters. We&apos;ll use your WhatsApp number for
-            cohort updates and support — nothing else.
+            course updates and support — nothing else.
           </p>
         ) : (
           <p className="text-right">

@@ -229,8 +229,7 @@ function EmptyState() {
         You haven&apos;t enrolled yet
       </h4>
       <p className="mx-auto mt-1 max-w-sm text-sm text-ink-500">
-        Choose a track and secure your seat in Cohort 2 to start your caregiving
-        career.
+        Choose a track and enrol today to start your caregiving career.
       </p>
       <Link
         href="/programs"
