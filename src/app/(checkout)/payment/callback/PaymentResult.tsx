@@ -11,7 +11,6 @@ type State = "verifying" | "success" | "partial" | "failed" | "error";
 export function PaymentResult() {
   const params = useSearchParams();
   const reference = params.get("reference");
-  const simulated = params.get("simulated");
   const [state, setState] = useState<State>("verifying");
 
   useEffect(() => {
@@ -21,9 +20,7 @@ export function PaymentResult() {
         if (!cancelled) setState("error");
         return;
       }
-      const url = `/api/payments/verify?reference=${encodeURIComponent(reference)}${
-        simulated ? "&simulated=1" : ""
-      }`;
+      const url = `/api/payments/verify?reference=${encodeURIComponent(reference)}`;
       try {
         const res = await fetch(url);
         const json = await res.json();
@@ -41,7 +38,7 @@ export function PaymentResult() {
     return () => {
       cancelled = true;
     };
-  }, [reference, simulated]);
+  }, [reference]);
 
   if (state === "verifying") {
     return (

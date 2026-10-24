@@ -27,11 +27,12 @@ export function payNowNaira(track: Track, plan: PaymentPlan): number {
 
 /**
  * Apply a verified successful payment to its enrollment, idempotently.
- * Returns the updated enrollment, or null if the reference is unknown.
+ * Returns the updated enrollment, or null if the reference is unknown or the
+ * amount Paystack reports is less than this payment was for.
  */
 export async function applySuccessfulPayment(
   reference: string,
-  info: { channel?: string; paidAt?: Date }
+  info: { channel?: string; paidAt?: Date; amountKobo?: number }
 ) {
   const payment = await prisma.payment.findUnique({
     where: { reference },
@@ -44,38 +45,49 @@ export async function applySuccessfulPayment(
     return payment.enrollment;
   }
 
-  const enrollment = payment.enrollment;
-  const newAmountPaid = enrollment.amountPaid + payment.amount;
-  const fullyPaid = newAmountPaid >= enrollment.totalAmount;
+  // Never credit more than was actually paid.
+  if (info.amountKobo !== undefined && info.amountKobo < payment.amount) {
+    console.error(`[payments] ${reference}: paid ${info.amountKobo} kobo, expected ${payment.amount}`);
+    await markPaymentFailed(reference);
+    return null;
+  }
 
-  // On the deposit (first partial payment), stamp the balance due date so the
-  // reminder cron and the confirmation email have a concrete deadline.
-  const balanceDueDate =
-    !fullyPaid && !enrollment.balanceDueDate
-      ? new Date(SITE.balanceDueDate)
-      : enrollment.balanceDueDate;
-
-  const [, updatedEnrollment] = await prisma.$transaction([
-    prisma.payment.update({
-      where: { id: payment.id },
+  const updatedEnrollment = await prisma.$transaction(async (tx) => {
+    // Claim the payment first: the webhook and the callback verify can race,
+    // and only the caller that flips it to SUCCESS may credit the enrollment.
+    const claim = await tx.payment.updateMany({
+      where: { id: payment.id, status: { not: "SUCCESS" } },
       data: {
         status: "SUCCESS",
         channel: info.channel ?? null,
         paidAt: info.paidAt ?? new Date(),
       },
-    }),
-    prisma.enrollment.update({
-      where: { id: enrollment.id },
+    });
+    if (claim.count === 0) return null;
+
+    const credited = await tx.enrollment.update({
+      where: { id: payment.enrollmentId },
+      data: { amountPaid: { increment: payment.amount } },
+    });
+    const fullyPaid = credited.amountPaid >= credited.totalAmount;
+    // On the deposit (first partial payment), stamp the balance due date so the
+    // reminder cron and the confirmation email have a concrete deadline.
+    return tx.enrollment.update({
+      where: { id: credited.id },
       data: {
-        amountPaid: newAmountPaid,
         status: fullyPaid ? "ACTIVE" : "PARTIAL",
-        balanceDueDate,
+        balanceDueDate: !fullyPaid && !credited.balanceDueDate ? new Date(SITE.balanceDueDate) : credited.balanceDueDate,
       },
-    }),
-  ]);
+    });
+  });
+
+  // Lost the race: the other caller credited it and sends the email.
+  if (!updatedEnrollment) {
+    return prisma.enrollment.findUnique({ where: { id: payment.enrollmentId } });
+  }
 
   // Fire the SOP email for this milestone, exactly once (see notifyPayment).
-  await notifyPayment(updatedEnrollment, fullyPaid);
+  await notifyPayment(updatedEnrollment, updatedEnrollment.status === "ACTIVE");
 
   return updatedEnrollment;
 }

@@ -17,7 +17,7 @@ import { Kicker } from "@/components/ui/SectionHeading";
 import { Reveal, Stagger, StaggerItem, motion } from "@/components/ui/motion";
 import { PricingCards } from "./PricingCards";
 import { CTABand } from "./CTABand";
-import type { Program } from "@/content/site";
+import { SITE, type Program } from "@/content/site";
 import { cn } from "@/lib/utils";
 
 const easeOutExpo = [0.16, 1, 0.3, 1] as const;
@@ -211,6 +211,13 @@ export function ProgramLanding({ program }: { program: Program }) {
             title="Choose your entry point"
             description="Every journey is different. Pick the entry point that matches your current budget and career goals. You can always upgrade as your skills grow."
           />
+          {SITE.prelaunch && (
+            <p className="mx-auto mt-8 max-w-2xl rounded-3xl border border-primary-100 bg-white px-6 py-4 text-center text-sm text-ink-700">
+              <span className="font-semibold text-primary-700">Early enrolment is open.</span> Secure your place
+              now. Our learning platform and app launch soon, and we&apos;ll email you the moment your courses
+              are ready.
+            </p>
+          )}
           <div className="mt-14">
             <PricingCards program={program} />
           </div>
@@ -219,7 +226,11 @@ export function ProgramLanding({ program }: { program: Program }) {
 
       <CTABand
         title={`Ready to start your ${program.shortName} journey?`}
-        description="Start learning the moment you are ready. Pick your entry point and go at your own pace."
+        description={
+          SITE.prelaunch
+            ? "Early enrolment is open. Secure your place now and start the day our learning platform launches."
+            : "Start learning the moment you are ready. Pick your entry point and go at your own pace."
+        }
         primaryHref="#pricing"
         primaryLabel="Choose Your Entry Point"
       />

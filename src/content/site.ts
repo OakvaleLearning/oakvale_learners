@@ -19,6 +19,9 @@ export const SITE = {
   // The Oakvale LMS app — handles enrolment, payment and self-paced learning.
   // Until NEXT_PUBLIC_LMS_URL is set, enrol CTAs fall back to the contact page.
   lmsUrl: process.env.NEXT_PUBLIC_LMS_URL || "/contact",
+  // Early enrolment before the learning platform launches: pricing pages say
+  // "secure your place now". Remove NEXT_PUBLIC_PRELAUNCH on launch day.
+  prelaunch: process.env.NEXT_PUBLIC_PRELAUNCH === "true",
   socials: {
     instagram: "#",
     linkedin: "#",

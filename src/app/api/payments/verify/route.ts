@@ -16,7 +16,6 @@ export async function GET(req: Request) {
 
   const { searchParams } = new URL(req.url);
   const reference = searchParams.get("reference");
-  const simulated = searchParams.get("simulated") === "1";
 
   if (!reference) {
     return NextResponse.json({ error: "Missing reference" }, { status: 400 });
@@ -27,13 +26,15 @@ export async function GET(req: Request) {
     return NextResponse.json({ error: "Payment not found" }, { status: 404 });
   }
 
-  const result = await verifyTransaction(reference, simulated);
+  const result = await verifyTransaction(reference);
 
   if (result.success) {
     const enrollment = await applySuccessfulPayment(reference, {
       channel: result.channel,
       paidAt: result.paidAt,
+      amountKobo: result.amountKobo,
     });
+    if (!enrollment) return NextResponse.json({ status: "failed" });
     return NextResponse.json({
       status: "success",
       enrollmentStatus: enrollment?.status ?? "ACTIVE",

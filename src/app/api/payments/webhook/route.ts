@@ -22,7 +22,7 @@ export async function POST(req: Request) {
     }
   }
 
-  let event: { event?: string; data?: { reference?: string; channel?: string; paid_at?: string } };
+  let event: { event?: string; data?: { reference?: string; channel?: string; paid_at?: string; amount?: number } };
   try {
     event = JSON.parse(raw);
   } catch {
@@ -38,6 +38,7 @@ export async function POST(req: Request) {
     await applySuccessfulPayment(reference, {
       channel: event.data?.channel,
       paidAt: event.data?.paid_at ? new Date(event.data.paid_at) : new Date(),
+      amountKobo: event.data?.amount,
     });
   } else if (event.event === "charge.failed") {
     await markPaymentFailed(reference);

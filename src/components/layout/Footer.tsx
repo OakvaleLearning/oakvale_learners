@@ -116,6 +116,17 @@ export function Footer() {
             <p>
               © {new Date().getFullYear()} {SITE.name}. All rights reserved.
             </p>
+            <p>
+              Developed by{" "}
+              <a
+                href="https://www.circleofthreetech.com/"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="font-medium text-ink-300 hover:text-white"
+              >
+                co3
+              </a>
+            </p>
             <p className="flex gap-4">
               <Link href="/privacy" className="hover:text-white">
                 Privacy

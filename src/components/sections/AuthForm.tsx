@@ -21,7 +21,9 @@ const inputClass =
 export function AuthForm({ mode }: { mode: "login" | "signup" }) {
   const router = useRouter();
   const params = useSearchParams();
-  const next = params.get("next");
+  // Only same-site paths: "?next=https://evil.example" must not send people off-site.
+  const nextParam = params.get("next");
+  const next = nextParam && /^\/(?![/\\])/.test(nextParam) ? nextParam : null;
 
   const [showPassword, setShowPassword] = useState(false);
   const [status, setStatus] = useState<"idle" | "loading">("idle");

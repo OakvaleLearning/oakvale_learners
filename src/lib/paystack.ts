@@ -86,11 +86,10 @@ interface VerifyResult {
   amountKobo?: number;
 }
 
-export async function verifyTransaction(
-  reference: string,
-  simulated = false
-): Promise<VerifyResult> {
-  if (!isPaystackConfigured() || simulated) {
+export async function verifyTransaction(reference: string): Promise<VerifyResult> {
+  // Simulate only when Paystack isn't configured (local dev). Never trust a
+  // client-supplied flag: it would let anyone enrol without paying.
+  if (!isPaystackConfigured()) {
     // Simulated payment always succeeds (dev/testing only).
     return { success: true, channel: "simulated", paidAt: new Date() };
   }
