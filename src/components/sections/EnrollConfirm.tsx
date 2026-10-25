@@ -36,7 +36,7 @@ export function EnrollConfirm({
   return (
     <div>
       {error && (
-        <p className="mb-4 rounded-2xl border border-accent-200 bg-accent-50 px-4 py-3 text-sm text-accent-700">
+        <p className="mb-4 rounded-2xl border border-danger-200 bg-danger-50 px-4 py-3 text-sm text-danger-700">
           {error}
         </p>
       )}

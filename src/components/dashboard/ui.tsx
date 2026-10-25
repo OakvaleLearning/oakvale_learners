@@ -41,7 +41,7 @@ const statusStyles: Record<string, string> = {
   PENDING: "bg-ink-100 text-ink-600 ring-ink-200",
   CANCELLED: "bg-ink-100 text-ink-500 ring-ink-200",
   SUCCESS: "bg-emerald-50 text-emerald-700 ring-emerald-200",
-  FAILED: "bg-accent-50 text-accent-700 ring-accent-200",
+  FAILED: "bg-danger-50 text-danger-700 ring-danger-200",
   ABANDONED: "bg-ink-100 text-ink-500 ring-ink-200",
 };
 

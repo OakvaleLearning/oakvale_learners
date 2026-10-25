@@ -103,7 +103,7 @@ export function ContactForm() {
         />
       </div>
       {status === "error" && (
-        <p className="text-sm text-accent-600">{message}</p>
+        <p className="text-sm text-danger-600">{message}</p>
       )}
       <button
         type="submit"

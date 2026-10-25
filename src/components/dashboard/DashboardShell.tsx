@@ -113,7 +113,7 @@ export function DashboardShell({
         </div>
         <button
           onClick={logout}
-          className="mt-1 flex w-full items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium text-ink-600 transition-colors hover:bg-accent-50 hover:text-accent-600"
+          className="mt-1 flex w-full items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium text-ink-600 transition-colors hover:bg-danger-50 hover:text-danger-600"
         >
           <LogOut className="size-4.5 [width:1.125rem] [height:1.125rem]" />
           Log out

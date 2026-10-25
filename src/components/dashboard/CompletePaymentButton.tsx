@@ -49,7 +49,7 @@ export function CompletePaymentButton({
         )}
         {label}
       </button>
-      {error && <p className="mt-1.5 text-xs text-accent-600">{error}</p>}
+      {error && <p className="mt-1.5 text-xs text-danger-600">{error}</p>}
     </div>
   );
 }

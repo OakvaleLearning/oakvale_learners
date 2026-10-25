@@ -46,7 +46,7 @@ export function BlogPostForm({
   return (
     <form action={formAction} className="space-y-6">
       {state?.error && (
-        <div className="flex items-center gap-2 rounded-xl border border-accent-200 bg-accent-50 px-4 py-3 text-sm font-medium text-accent-700">
+        <div className="flex items-center gap-2 rounded-xl border border-danger-200 bg-danger-50 px-4 py-3 text-sm font-medium text-danger-700">
           <AlertCircle className="size-4 shrink-0" />
           {state.error}
         </div>
