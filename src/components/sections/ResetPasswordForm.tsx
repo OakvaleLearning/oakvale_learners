@@ -77,7 +77,7 @@ export function ResetPasswordForm() {
       </p>
 
       {error && (
-        <div className="mt-6 flex items-start gap-2.5 rounded-2xl border border-accent-200 bg-accent-50 px-4 py-3 text-sm text-accent-700">
+        <div className="mt-6 flex items-start gap-2.5 rounded-2xl border border-danger-200 bg-danger-50 px-4 py-3 text-sm text-danger-700">
           <AlertCircle className="mt-0.5 size-4 shrink-0" />
           {error}
         </div>
